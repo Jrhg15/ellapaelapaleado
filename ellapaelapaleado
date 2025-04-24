@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Samuel Morillo - El Lapa El Apaleado</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #0f0f0f;
+      color: #f2f2f2;
+      text-align: center;
+      padding: 50px;
+    }
+    h1 {
+      font-size: 3em;
+      color: #ff4747;
+    }
+    h2 {
+      color: #ffa500;
+    }
+    p {
+      font-size: 1.2em;
+      margin-top: 20px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .img-container {
+      margin-top: 30px;
+    }
+    img {
+      width: 300px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ff4747;
+    }
+    iframe {
+      margin-top: 40px;
+      width: 100%;
+      max-width: 560px;
+      height: 315px;
+      border: none;
+    }
+    footer {
+      margin-top: 50px;
+      font-size: 0.9em;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <h1>Samuel Morillo</h1>
+  <h2>El Lapa El Apaleado</h2>
+
+  <!-- Imagen agregada -->
+  <div class="img-container">
+    <img src="https://img.restaurantguru.com/c08b-Restaurant-KHAN-Doner-Kebab-meals.jpg" alt="Imagen de Kebab">
+  </div>
+
+  <p><strong>Biografía:</strong><br>
+    Samuel Morillo, también conocido como *Bigfoot*, es una criatura mítica con un fuerte olor corporal, avistado frecuentemente en zonas urbanas desde el centro hasat el extraradio de la linea de la concepcion pidiendo cigarros gratuitos. Algunos lo temen, otros lo aman, pero nadie puede ignorarlo.
+  </p>
+
+  <p>
+    Su leyenda crece y renace , desde el pub de andres hasta amar al lapa te vas a encontar.
+  </p>
+
+  <!-- Video de música incrustado desde YouTube -->
+  <iframe src="https://www.youtube.com/embed/Kts_f8Oljgw" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+  <footer>
+    © 2025 Samuel Morillo - Sitio hecho con Dani martin, cigarros y kebab
+  </footer>
+</body>
+</html>
