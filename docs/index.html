@@ -73,7 +73,7 @@
       top: 0;
       left: 0;
       font-size: 90px;
-      color: rgba(255, 255, 0, 0.75); /* Color amarillo brillante */
+      color: rgba(0, 0, 255, 0.75); /* Color rojo*/
       z-index: 0;
       pointer-events: none;
       user-select: none;
@@ -88,7 +88,7 @@
       bottom: 10%;
       left: 0;
       font-size: 50px;
-      color: rgba(255, 255, 255, 0.5);
+      color: rgbargba(255, 0, 0, 0.75);;
       z-index: 1;
       pointer-events: none;
       user-select: none;
@@ -126,30 +126,6 @@
       border-radius: 5px;
       z-index: 2;
     }
-
-    .mapa-description {
-      margin-top: 20px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      font-size: 1em;
-      color: #f2f2f2;
-      background-color: rgba(0, 0, 0, 0.5);
-      padding: 20px;
-      border-radius: 10px;
-    }
-
-    .map-container {
-      margin-top: 20px;
-      position: relative;
-      width: 100%;
-      height: 400px;
-    }
-
-    .map-container iframe {
-      width: 100%;
-      height: 100%;
-    }
   </style>
 </head>
 <body>
@@ -175,6 +151,177 @@
   <p>
     EL lapa va contando a todo el mundo con gema tengo algo muy profundo , pero gema ni lo pude ver lo tiene mas bloqueado que el lapa pagando pa BEBER , CON ALBITA TORBE TAMBIEN SE LO INVENTO , EL LAPA DICE QUE EN EL PALENQUE ALGO PASO , pero la verdad es otra que va, lo mas cerca que estuvo fue del kebab.
   </p>
+
+  <!-- CONTENEDOR DE LA RULETA -->
+<div style="text-align:center; margin-top:50px;">
+  <canvas id="canvas-ruleta" width="500" height="500" style="background-color:#0f0f0f; border:2px solid #ff4747; border-radius:50%;"></canvas>
+  
+  <div style="margin-top:20px;">
+    <label for="numero">Elige tu número:</label>
+    <select id="numero">
+      <!-- Números de ruleta clásica (0-36) -->
+      <option value="0">0</option>
+      <option value="32">32</option>
+      <option value="15">15</option>
+      <option value="19">19</option>
+      <option value="4">4</option>
+      <option value="21">21</option>
+      <option value="2">2</option>
+      <option value="25">25</option>
+      <option value="17">17</option>
+      <option value="34">34</option>
+      <option value="6">6</option>
+      <option value="27">27</option>
+      <option value="13">13</option>
+      <option value="36">36</option>
+      <option value="11">11</option>
+      <option value="30">30</option>
+      <option value="8">8</option>
+      <option value="23">23</option>
+      <option value="10">10</option>
+      <option value="5">5</option>
+      <option value="24">24</option>
+      <option value="16">16</option>
+      <option value="33">33</option>
+      <option value="1">1</option>
+      <option value="20">20</option>
+      <option value="14">14</option>
+      <option value="31">31</option>
+      <option value="9">9</option>
+      <option value="22">22</option>
+      <option value="18">18</option>
+      <option value="29">29</option>
+      <option value="7">7</option>
+      <option value="28">28</option>
+      <option value="12">12</option>
+      <option value="35">35</option>
+      <option value="3">3</option>
+      <option value="26">26</option>
+    </select>
+
+    <button onclick="tirarRuleta()" style="margin-left:20px; padding:10px; background:#ff4747; border:none; border-radius:5px; color:#fff; font-size:1em;">¡TIRAR!</button>
+  </div>
+
+  <p id="resultado" style="margin-top:20px; font-size:1.5em; color:#ffa500;"></p>
+</div>
+
+<script>
+// Configuración ruleta
+const canvas = document.getElementById('canvas-ruleta');
+const ctx = canvas.getContext('2d');
+const width = canvas.width;
+const height = canvas.height;
+const centerX = width / 2;
+const centerY = height / 2;
+const radius = 230;
+const numbers = [
+  0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,
+  14,31,9,22,18,29,7,28,12,35,3,26
+];
+
+// Colores de cada número (0 verde, otros rojos/negros)
+const colors = {
+  0: 'green',
+  32: 'red', 15: 'black', 19: 'red', 4: 'black', 21: 'red', 2: 'black', 25: 'red', 17: 'black',
+  34: 'red', 6: 'black', 27: 'red', 13: 'black', 36: 'red', 11: 'black', 30: 'red', 8: 'black',
+  23: 'red', 10: 'black', 5: 'red', 24: 'black', 16: 'red', 33: 'black', 1: 'red', 20: 'black',
+  14: 'red', 31: 'black', 9: 'red', 22: 'black', 18: 'red', 29: 'black', 7: 'red', 28: 'black',
+  12: 'red', 35: 'black', 3: 'red', 26: 'black'
+};
+
+let startAngle = 0;
+let spinning = false;
+let spinAngle = 0;
+let ballAngle = 0;
+let ballSpeed = 0;
+
+// Dibujar ruleta
+function drawRoulette() {
+  ctx.clearRect(0, 0, width, height);
+  const sliceAngle = 2 * Math.PI / numbers.length;
+
+  for (let i = 0; i < numbers.length; i++) {
+    const angle = startAngle + i * sliceAngle;
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY);
+    ctx.arc(centerX, centerY, radius, angle, angle + sliceAngle);
+    ctx.closePath();
+    ctx.fillStyle = colors[numbers[i]];
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.stroke();
+
+    // Texto del número
+    ctx.save();
+    ctx.translate(centerX, centerY);
+    ctx.rotate(angle + sliceAngle / 2);
+    ctx.textAlign = "right";
+    ctx.fillStyle = "white";
+    ctx.font = "bold 18px Arial";
+    ctx.fillText(numbers[i], radius - 10, 10);
+    ctx.restore();
+  }
+
+  // Dibuja bola
+  const ballX = centerX + (radius - 30) * Math.cos(ballAngle);
+  const ballY = centerY + (radius - 30) * Math.sin(ballAngle);
+  ctx.beginPath();
+  ctx.arc(ballX, ballY, 8, 0, 2 * Math.PI);
+  ctx.fillStyle = "white";
+  ctx.fill();
+}
+
+// Animar ruleta
+function animate() {
+  if (spinning) {
+    startAngle += spinAngle;
+    ballAngle -= ballSpeed;
+    spinAngle *= 0.98; // frenar
+    ballSpeed *= 0.985;
+    if (spinAngle < 0.002) {
+      spinning = false;
+      determinarResultado();
+    }
+    drawRoulette();
+    requestAnimationFrame(animate);
+  }
+}
+
+// Tirar ruleta
+function tirarRuleta() {
+  if (!spinning) {
+    spinAngle = Math.random() * 0.3 + 0.25;
+    ballSpeed = Math.random() * 0.3 + 0.25;
+    spinning = true;
+    animate();
+  }
+}
+
+// Determinar resultado final
+function determinarResultado() {
+  const sliceAngle = 2 * Math.PI / numbers.length;
+  let finalAngle = (2 * Math.PI - ballAngle + startAngle) % (2 * Math.PI);
+  let index = Math.floor(finalAngle / sliceAngle) % numbers.length;
+  let numeroGanador = numbers[index];
+
+  let elegido = parseInt(document.getElementById('numero').value);
+  let mensaje = "";
+
+  if (elegido === numeroGanador) {
+    mensaje = "¡Enhorabuena, acertaste!No hay Calada pal Lapa";
+  } else if (colors[elegido] === colors[numeroGanador]) {
+    mensaje = "¡ROJOS NO! Una calada pal Lapa ";
+  } else {
+    mensaje = "Has fallado, APALEADO";
+  }
+
+  document.getElementById('resultado').textContent = "Número ganador: " + numeroGanador + " - " + mensaje;
+}
+
+// Inicializar ruleta
+drawRoulette();
+</script>
+
 
   <!-- Selector de motes-->
   <div>
@@ -203,25 +350,40 @@
     <span id="contador">0</span>€ para la virginidad del VBSE
   </div>
 
- <!-- Script para el contador -->
-  <script>
-    let contador = 0;
+ <script>
+  const LIMITE = 60;
+  let contador = parseInt(localStorage.getItem('contador')) || 0;
 
-    function aumentarContador() {
-      contador++;
-      document.getElementById('contador').textContent = contador;
+  function actualizarVisual() {
+    document.getElementById('contador').textContent = contador;
+  }
+
+  function aumentarContador() {
+    contador++;
+
+    if (contador >= LIMITE) {
+      alert("LLegamos a 60€ ,¡Hoy Al Querubín le pagan el postre");
+      document.querySelector('.contador').innerHTML = "🎉 ¡Al Querubín le pagan el postre! 🎉";
+
+      setTimeout(() => {
+        contador = 0;
+        localStorage.setItem('contador', contador);
+        document.querySelector('.contador').innerHTML = '<span id="contador">0</span>';
+      }, 1500);
+    } else {
+      localStorage.setItem('contador', contador);
+      actualizarVisual();
     }
+  }
 
-    // Aumentar contador con cada clic en el contador
-    document.querySelector('.contador').addEventListener('click', aumentarContador);
+  // Mostrar el valor guardado al cargar
+  actualizarVisual();
 
-    setInterval(actualizarContador, 1000);
+  // Detectar clic para aumentar
+  document.querySelector('.contador').addEventListener('click', aumentarContador);
+</script>
 
-    function actualizarContador() {
-      // Aquí puedes definir el comportamiento si quieres que se aumente de alguna otra manera
-      // He dejado esto como referencia si se necesita un comportamiento adicional
-    }
- 
+
   </script>
   <!-- Script para cambiar engacahr cada mote del lapa con una cancion -->
   <script>
@@ -242,12 +404,152 @@
     }
   </script>
 
-<!-- Reseña del santo llano carcariano -->
-<div class="mapa-description">
-  <h2>Lugar Divino del Santo Llano Carcariano</h2>
-  <p>Buen lugar para estar con la familia y amigos, dentro hay una buena variedad de botellas de whisky, vino y power. Puedes socializar con todo el mundo. A veces se celebran los juegos Olímpicos Carcarianos donde hay todo tipo de juegos, por ejemplo mi favorito es el futbolín. Luego ahí barriladas a buen precio llamadas barriladas carcarianas. La estética del lugar me fascina, y para el tema del covid no es problema pues hay mucha ventilación. Las vistas son espectaculares, pues podrás apreciar el gran llano carcariano, con la niña del oasis, la cabaña carcariana y nevera. Los servicios son mixtos y a veces te puedes entretener hablando de política mientras consumes papas fritas o cualquier bebida alcohólica, por ejemplo DYC. No dudaré en volver y gracias por las leyes recibidas.</p>
-  <p><strong>Reseña: ★★★★★</strong></p>
-</div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escape de Gema Me Hacías</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #333;
+            color: white;
+        }
+
+        #gameArea {
+            position: relative;
+            width: 800px;
+            height: 400px;
+            margin: 50px auto;
+            border: 2px solid #fff;
+            background-color: #111;
+        }
+
+        .character {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            color: white;
+            text-align: center;
+            line-height: 50px;
+            font-size: 18px;
+        }
+
+        .chaser {
+            background-color: green;
+        }
+
+        .message {
+            position: absolute;
+            width: 100%;
+            top: 10px;
+            text-align: center;
+            font-size: 20px;
+            color: #fff;
+        }
+
+        .score {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 18px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameArea">
+        <div class="message" id="gameMessage">Gema Me Hacías intenta escapar de Samuel Lapa El Apaleado</div>
+        <div class="character" id="gema" style="top: 50px; left: 50px;">Gema</div>
+        <div class="character chaser" id="lapa" style="top: 50px; left: 700px;">Lapa</div>
+        <div class="score" id="score">Puntuación: 0</div>
+    </div>
+
+    <script>
+        const gema = document.getElementById('gema');
+        const lapa = document.getElementById('lapa');
+        const gameMessage = document.getElementById('gameMessage');
+        const scoreDisplay = document.getElementById('score');
+        
+        let gemaX = 50, gemaY = 50, lapaX = 700, lapaY = 50;
+        let score = 0;
+        let isGameOver = false;
+
+        function moveGema(e) {
+            if (isGameOver) return;
+            
+             if (e.key === 'w' || e.key === 'W') {
+                gemaY -= 10;
+            } else if (e.key === 's' || e.key === 'S') {
+                gemaY += 10;
+            } else if (e.key === 'a' || e.key === 'A') {
+                gemaX -= 10;
+            } else if (e.key === 'd' || e.key === 'D') {
+                gemaX += 10;
+            }
+
+            // Limitar movimiento dentro del área de juego
+            gemaX = Math.max(0, Math.min(gemaX, 750));
+            gemaY = Math.max(0, Math.min(gemaY, 350));
+
+            gema.style.top = gemaY + 'px';
+            gema.style.left = gemaX + 'px';
+        }
+
+        function moveLapa() {
+            if (isGameOver) return;
+
+            // Lapa persigue a Gema
+            if (lapaX < gemaX) {
+                lapaX += 2;
+            } else if (lapaX > gemaX) {
+                lapaX -= 2;
+            }
+            if (lapaY < gemaY) {
+                lapaY += 2;
+            } else if (lapaY > gemaY) {
+                lapaY -= 2;
+            }
+
+            lapa.style.top = lapaY + 'px';
+            lapa.style.left = lapaX + 'px';
+            
+            // Verificar colisión
+            if (Math.abs(lapaX - gemaX) < 50 && Math.abs(lapaY - gemaY) < 50) {
+                gameOver();
+            }
+        }
+
+        function gameOver() {
+            isGameOver = true;
+            gameMessage.textContent = "Lapa El Apaleado se masturbará con deep-fakes de Gema me hacias";
+            scoreDisplay.textContent = `Puntuación final: ${score}`;
+        }
+
+        // Actualizar la puntuación
+        function updateScore() {
+            if (!isGameOver) {
+                score++;
+                scoreDisplay.textContent = `Puntuación: ${score}`;
+            }
+        }
+
+        // Iniciar el juego
+        setInterval(() => {
+            if (!isGameOver) {
+                moveLapa();
+                updateScore();
+            }
+        }, 100);
+
+        // Escuchar las teclas para mover a Gema
+        window.addEventListener('keydown', moveGema);
+    </script>
+
+
 
 <!-- Video de YouTube de Burlingtonglobal -->
 <div class="video-container">
@@ -291,8 +593,6 @@
 
 </body>
 </html>
-
-
 
 
   <footer>
