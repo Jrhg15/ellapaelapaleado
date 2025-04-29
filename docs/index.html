@@ -403,6 +403,45 @@ drawRoulette();
       document.getElementById('video-iframe').src = videoUrl;
     }
   </script>
+<!-- Video de YouTube de Burlingtonglobal -->
+<div class="video-container">
+  <iframe width="100%" height="315" src="https://www.youtube.com/embed/pK3c8DA9pkI?autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+ <!-- Botón  que con clic activa el audio del barros y muestra un mensaje adicional -->
+  <button id="boton-lapa">EL LAPA EL APALEADO</button>
+
+  <!--  Mensaje adicional -->
+  <div id="mensaje"></div>
+
+  <!-- Audio del barroso subido en Archive.org -->
+  <div class="audio-container">
+    <iframe id="audioIframe" src="" width="500" height="60" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
+  </div>
+
+  <script>
+    // Reproducir audio y mostrar mensaje al hacer clic en el botón
+    document.getElementById('boton-lapa').addEventListener('click', function() {
+      // Cambiar el src del iframe para cargar el nuevo audio con autoplay
+      let iframe = document.getElementById('audioIframe');
+      iframe.src = "https://archive.org/embed/burlington-global?autoplay=1";  // Añadir autoplay solo al hacer clic
+
+      // Cambiar texto del botón
+      this.innerHTML = "¡Has activado el Lapa! Este Apaleado ha sido denunciado por Gema Me Hacías.";
+
+      // Mostrar mensaje boton en la página
+      var mensaje = document.getElementById('mensaje');
+      mensaje.innerHTML = "¡LAPA EL APALEADO has sido denunciado por Gema Me Hacías!";
+
+      // Mostrar una alerta también
+      alert("¡Has activado el Lapa! Apaleado denunciado por Gema Me Hacías.");
+
+      // Efecto de botón
+      this.classList.add('click-effect');
+      setTimeout(() => {
+        this.classList.remove('click-effect');
+      }, 500);
+    });
+  </script>
 
 <head>
     <meta charset="UTF-8">
@@ -549,47 +588,214 @@ drawRoulette();
         window.addEventListener('keydown', moveGema);
     </script>
 
+<head>
+    <meta charset="UTF-8">
+    <title>Los Slots del LAPA</title>
+    <style>
+        body {
+            background: radial-gradient(circle, #222 0%, #000 100%);
+            font-family: 'Arial Black', sans-serif;
+            color: white;
+            text-align: center;
+            padding-top: 50px;
+        }
+        .machine {
+            background: linear-gradient(to bottom, #555, #222);
+            border: 10px solid #ccc;
+            border-radius: 20px;
+            width: 420px;
+            margin: 0 auto;
+            padding: 30px;
+            box-shadow: 0 0 30px #aaa, inset 0 0 20px #000;
+            position: relative;
+        }
+        .slots {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .slot {
+            background: black;
+            border: 5px solid #999;
+            border-radius: 15px;
+            width: 100px;
+            height: 100px;
+            margin: 0 10px;
+            font-size: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: yellow;
+            box-shadow: inset 0 0 10px #222;
+        }
+        #spinButton {
+            padding: 12px 30px;
+            font-size: 22px;
+            background-color: #f39c12;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            color: white;
+            margin-top: 20px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        #spinButton:hover {
+            background-color: #e67e22;
+            transform: scale(1.05);
+        }
+        #result {
+            margin-top: 25px;
+            font-size: 24px;
+            min-height: 30px;
+        }
 
+        .lever {
+            position: absolute;
+            right: -60px;
+            top: 50px;
+            width: 20px;
+            height: 100px;
+            background: #999;
+            border-radius: 10px;
+            box-shadow: inset 0 0 5px #666, 0 0 10px #ccc;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
 
-<!-- Video de YouTube de Burlingtonglobal -->
-<div class="video-container">
-  <iframe width="100%" height="315" src="https://www.youtube.com/embed/pK3c8DA9pkI?autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-</div>
- <!-- Botón  que con clic activa el audio del barros y muestra un mensaje adicional -->
-  <button id="boton-lapa">EL LAPA EL APALEADO</button>
+        .lever::after {
+            content: "";
+            position: absolute;
+            bottom: -20px;
+            left: -10px;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, red 30%, darkred 90%);
+            border-radius: 50%;
+            box-shadow: 0 0 10px red;
+        }
 
-  <!--  Mensaje adicional -->
-  <div id="mensaje"></div>
+        .lights {
+            position: absolute;
+            top: -25px;
+            left: -25px;
+            width: calc(100% + 50px);
+            height: calc(100% + 50px);
+            border-radius: 30px;
+            box-shadow:
+                0 0 20px #ff0,
+                inset 0 0 20px #f0f,
+                0 0 30px #0ff,
+                0 0 60px #f0f;
+            animation: blink 0.8s infinite alternate;
+            display: none;
+            z-index: 0;
+        }
 
-  <!-- Audio del barroso subido en Archive.org -->
-  <div class="audio-container">
-    <iframe id="audioIframe" src="" width="500" height="60" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
-  </div>
+        @keyframes blink {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Lin-king del Lapa</h1>
+    <div class="machine">
+        <div class="slots">
+            <div class="slot" id="slot1">?</div>
+            <div class="slot" id="slot2">?</div>
+            <div class="slot" id="slot3">?</div>
+        </div>
+        <button id="spinButton">¡Girar!</button>
+        <div id="result"></div>
+        <div class="lever" id="lever"></div>
+    </div>
 
-  <script>
-    // Reproducir audio y mostrar mensaje al hacer clic en el botón
-    document.getElementById('boton-lapa').addEventListener('click', function() {
-      // Cambiar el src del iframe para cargar el nuevo audio con autoplay
-      let iframe = document.getElementById('audioIframe');
-      iframe.src = "https://archive.org/embed/burlington-global?autoplay=1";  // Añadir autoplay solo al hacer clic
+    <script>
+        const motes = ["Querubín", "Apaleado", "Lapa", "Hitly", "VBSE"];
+        const slots = [
+            document.getElementById('slot1'),
+            document.getElementById('slot2'),
+            document.getElementById('slot3')
+        ];
+        const result = document.getElementById('result');
+        const button = document.getElementById('spinButton');
+        const lever = document.getElementById('lever');
+        const lights = document.createElement("div");
+        lights.classList.add("lights");
+        document.querySelector(".machine").appendChild(lights);
 
-      // Cambiar texto del botón
-      this.innerHTML = "¡Has activado el Lapa! Este Apaleado ha sido denunciado por Gema Me Hacías.";
+        const spinSound = new Audio("https://www.myinstants.com/media/sounds/slot-machine-spin.mp3");
+        const winSound = new Audio("https://www.myinstants.com/media/sounds/jackpot.mp3");
 
-      // Mostrar mensaje boton en la página
-      var mensaje = document.getElementById('mensaje');
-      mensaje.innerHTML = "¡LAPA EL APALEADO has sido denunciado por Gema Me Hacías!";
+        function spin(slotElement, duration) {
+            return new Promise(resolve => {
+                let spins = 0;
+                const interval = setInterval(() => {
+                    const randomMote = motes[Math.floor(Math.random() * motes.length)];
+                    slotElement.textContent = randomMote;
+                    spins++;
+                }, 50); 
 
-      // Mostrar una alerta también
-      alert("¡Has activado el Lapa! Apaleado denunciado por Gema Me Hacías.");
+                setTimeout(() => {
+                    clearInterval(interval);
+                    const finalMote = motes[Math.floor(Math.random() * motes.length)];
+                    slotElement.textContent = finalMote;
+                    resolve(finalMote);
+                }, duration);
+            });
+        }
 
-      // Efecto de botón
-      this.classList.add('click-effect');
-      setTimeout(() => {
-        this.classList.remove('click-effect');
-      }, 500);
-    });
-  </script>
+        button.addEventListener('click', async () => {
+            result.textContent = "";
+            button.disabled = true;
+            lights.style.display = "block";
+
+            lever.style.transform = "rotate(30deg)";
+            setTimeout(() => lever.style.transform = "rotate(0deg)", 300);
+
+            spinSound.currentTime = 0;
+            spinSound.play();
+
+            let final1, final2, final3;
+
+            if (Math.random() < 0.5) { // 50% de probabilidad de ganar
+                const chosen = motes[Math.floor(Math.random() * motes.length)];
+                final1 = final2 = final3 = chosen;
+                await Promise.all([
+                    spin(slots[0], 2000),
+                    spin(slots[1], 2300),
+                    spin(slots[2], 2600)
+                ]);
+                slots[0].textContent = chosen;
+                slots[1].textContent = chosen;
+                slots[2].textContent = chosen;
+
+                result.style.color = "lightgreen";
+                result.textContent = "¡El Lapa compartirá contigo la foto de Gema Me Hacías!";
+                winSound.play();
+            } else {
+                [final1, final2, final3] = await Promise.all([
+                    spin(slots[0], 2000),
+                    spin(slots[1], 2300),
+                    spin(slots[2], 2600)
+                ]);
+
+                if (final1 === final2 && final2 === final3) {
+                    result.style.color = "lightgreen";
+                    result.textContent = "¡El Lapa compartirá contigo la foto de Gema Me Hacías!";
+                    winSound.play();
+                } else {
+                    result.style.color = "red";
+                    result.textContent = "Sigue intentándolo apaleado...";
+                }
+            }
+
+            button.disabled = false;
+            setTimeout(() => lights.style.display = "none", 2000);
+        });
+    </script>
+
 
 </body>
 </html>
