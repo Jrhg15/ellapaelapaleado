@@ -273,8 +273,47 @@
       }, 500);
     });
   </script>
+<!-- Formulario para subir memes o fan art -->
+  <h2>¡Sube tu Meme o Fan Art de El Lapa!</h2>
+  <p>¡Haz tu propia versión de El Lapa o comparte un meme épico!</p>
+  <form id="form-fanart" enctype="multipart/form-data" action="#" method="POST">
+    <label for="user-file">Selecciona tu imagen (meme o fan art):</label>
+    <input type="file" name="user-image" id="user-file" accept="image/*" required>
+    <button type="submit">Subir Imagen</button>
+  </form>
 
-<head>
+  <!-- Galería de memes o fan art -->
+  <h2>Galería de Memes y Fan Art</h2>
+  <div class="galeria" id="gallery">
+    <!-- Aquí se mostrarán las imágenes subidas -->
+  </div>
+
+  <!-- Script para subir y mostrar las imágenes en la galería -->
+  <script>
+    const form = document.getElementById('form-fanart');
+    const gallery = document.getElementById('gallery');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      // Obtener el archivo de imagen
+      const fileInput = document.getElementById('user-file');
+      const file = fileInput.files[0];
+
+      if (file) {
+        // Crear una URL para la imagen
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const imgElement = document.createElement('img');
+          imgElement.src = e.target.result;
+          gallery.appendChild(imgElement);
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Escape de Gema Me Hacías</title>
