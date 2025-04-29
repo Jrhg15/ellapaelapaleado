@@ -259,23 +259,11 @@
 
   <script>
     function openPDF() {
-      // Crear una nueva ventana o pestaña
-      var newWindow = window.open('', '_blank', 'width=800,height=600');
-      
-      // Crear el iframe para mostrar el PDF en la nueva ventana
-      newWindow.document.write(`
-        <html>
-          <head>
-            <title>Conoce más sobre El Lapa</title>
-          </head>
-          <body style="text-align: center; padding: 20px; background-color: #0f0f0f;">
-            <h1 style="color: #ff4747;">Conoce más sobre El Lapa</h1>
-            <iframe src="https://archive.org/embed/denuncia_202504" width="100%" height="500px" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
-          </body>
-        </html>
-      `);
+      // Abrir la URL del PDF en una nueva ventana o pestaña
+      window.open('https://archive.org/embed/denuncia_202504', '_blank');
     }
   </script>
+
 
   <!-- Script para cambiar engacahr cada mote del lapa con una cancion -->
   <script>
