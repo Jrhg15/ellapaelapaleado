@@ -801,6 +801,47 @@ drawRoulette();
 </body>
 </html>
 
+  <div id="comentarios">
+  <h2>Deja tu comentario:</h2>
+  <textarea id="nuevo-comentario" placeholder="Escribe tu comentario aquí..."></textarea>
+  <button onclick="guardarComentario()">Comentar</button>
+
+  <h3>Comentarios:</h3>
+  <ul id="lista-comentarios">
+    <!-- Comentarios se agregarán aquí -->
+  </ul>
+</div>
+
+<script>
+  // Cargar los comentarios del LocalStorage
+  window.onload = function() {
+    cargarComentarios();
+  };
+
+  function cargarComentarios() {
+    const comentarios = JSON.parse(localStorage.getItem("comentarios")) || [];
+    const listaComentarios = document.getElementById("lista-comentarios");
+    listaComentarios.innerHTML = "";
+    comentarios.forEach(function(comentario) {
+      const li = document.createElement("li");
+      li.textContent = comentario;
+      listaComentarios.appendChild(li);
+    });
+  }
+
+  function guardarComentario() {
+    const comentario = document.getElementById("nuevo-comentario").value;
+    if (comentario.trim() !== "") {
+      let comentarios = JSON.parse(localStorage.getItem("comentarios")) || [];
+      comentarios.push(comentario);
+      localStorage.setItem("comentarios", JSON.stringify(comentarios));
+
+      cargarComentarios();  // Recargar la lista de comentarios
+      document.getElementById("nuevo-comentario").value = "";  // Limpiar el campo de texto
+    }
+  }
+</script>
+
 
   <footer>
     <p>© 2025 Apaleado virgin records -- Tengo la casa con cucarachas y ratas prendía.</p>
