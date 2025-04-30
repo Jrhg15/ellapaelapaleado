@@ -141,6 +141,135 @@
 
   <!-- Imagen 1 -->
   <img src="https://i.imgur.com/BHfYCyp.png" alt="Kebab Legendario">
+<style>
+  .pregunta {
+    margin-bottom: 30px;
+  }
+
+  .opcion {
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 6px 0;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .opcion:hover {
+    background-color: #f9f9f9;
+  }
+
+  .opcion input[type="radio"] {
+    display: none;
+  }
+
+  .opcion.seleccionada {
+    border-color: #ff4747;
+    background-color: #ffe5e5;
+  }
+
+  .frase {
+    font-style: italic;
+    color: #888;
+    margin-left: 10px;
+  }
+</style>
+
+<h2>¿Cuánto sabes del Lapa?</h2>
+<form id="quiz-lapa">
+  <div class="pregunta" data-pregunta="q1">
+    <p>1. ¿Cuál es el apodo de Samuel Moriche?</p>
+    <label class="opcion">
+      <input type="radio" name="q1" value="a">
+      El bigfoot <span class="frase">(Ni en sueños)</span>
+    </label>
+    <label class="opcion">
+      <input type="radio" name="q1" value="b">
+      El Lapa <span class="frase">("El Apaleado de Triana")</span>
+    </label>
+    <label class="opcion">
+      <input type="radio" name="q1" value="c">
+      El Tigre <span class="frase">(Solo en el Khan Doner Kebap a las 3AM)</span>
+    </label>
+  </div>
+
+  <div class="pregunta" data-pregunta="q2">
+    <p>2. ¿Qué suele pedir el Lapa?</p>
+    <label class="opcion">
+      <input type="radio" name="q2" value="a">
+      Nada <span class="frase">("Pa’ un postre, picha")</span>
+    </label>
+    <label class="opcion">
+      <input type="radio" name="q2" value="b">
+      cigarritos gratis <span class="frase">("¿Te sobra un cigarrito, shurmano?")</span>
+    </label>
+    <label class="opcion">
+      <input type="radio" name="q2" value="c">
+      un nestea <span class="frase">(pero nadie se lo da)</span>
+    </label>
+  </div>
+
+  <div class="pregunta" data-pregunta="q3">
+    <p>3. ¿Dónde tiene deudas el Lapa?</p>
+    <label class="opcion">
+      <input type="radio" name="q3" value="a">
+      En el gimnasio <span class="frase">(no lo puede pisar esta gema me hacias con su orden de alejamiento)</span>
+    </label>
+    <label class="opcion">
+      <input type="radio" name="q3" value="b">
+      Pub de Andrés y Khan Doner Kebab <span class="frase">("¡Samuel, págame el durum ya!")</span>
+    </label>
+    <label class="opcion">
+      <input type="radio" name="q3" value="c">
+      El instituto/La universidad <span class="frase">(el Lapa no estudia, predica)</span>
+    </label>
+  </div>
+
+  <button type="submit">Enviar respuestas</button>
+</form>
+
+<p id="resultado-lapa" style="margin-top:20px; font-weight:bold;"></p>
+
+<script>
+  // Efecto visual para seleccionar
+  const opciones = document.querySelectorAll('.opcion');
+  opciones.forEach(opcion => {
+    opcion.addEventListener('click', () => {
+      const grupo = opcion.closest('.pregunta');
+      grupo.querySelectorAll('.opcion').forEach(o => o.classList.remove('seleccionada'));
+      opcion.classList.add('seleccionada');
+      opcion.querySelector('input').checked = true;
+    });
+  });
+
+  // Evaluar respuestas
+  document.getElementById("quiz-lapa").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    let correctas = 0;
+    const respuestasCorrectas = {
+      q1: "a","b"
+      q2: "b",
+      q3: "b"
+    };
+
+    for (let pregunta in respuestasCorrectas) {
+      const respuesta = document.querySelector(`input[name="${pregunta}"]:checked`);
+      if (respuesta && respuesta.value === respuestasCorrectas[pregunta]) {
+        correctas++;
+      }
+    }
+
+    const resultado = document.getElementById("resultado-lapa");
+    if (correctas === 3) {
+      resultado.textContent = "¡Perfecto! Conoces todo sobre el Lapa.  Apaleado.";
+    } else if (correctas === 2) {
+      resultado.textContent = "¡Vas bien! Pero aún no tienes el carnet de Apaleado oficial.";
+    } else {
+      resultado.textContent = `Solo acertaste ${correctas}/3. ¡Repite el cuestionario del lapita!`;
+    }
+  });
+</script>
 
   <p><strong>Biografía:</strong><br>
     Samuel Morillo, también conocido como <em>Bigfoot</em>, es una criatura mítica con un fuerte olor corporal, avistado frecuentemente en zonas urbanas desde el centro hasta el extrarradio de La Línea de la Concepción pidiendo cigarros gratuitos. Ay que viene el lapa , el apaleao! .Con su barriga el boquerón mas pesado . De gema y albita se inventa pasión , pero lo unico real reside en su imaginación!.
