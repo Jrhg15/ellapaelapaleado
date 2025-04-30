@@ -192,15 +192,15 @@
     <p>1. ¿Cuál es el apodo de Samuel Moriche?</p>
     <label class="opcion" onclick="mostrarFrase(this)">
       <input type="radio" name="q1" value="a">
-      El Chulo <span class="frase">Ni en sueños.</span>
+      El apaleado <span class="frase">Ay el boquerón.</span>
     </label>
     <label class="opcion" onclick="mostrarFrase(this)">
       <input type="radio" name="q1" value="b">
-      El Lapa <span class="frase">El Apaleado de Triana.</span>
+      El Lapa <span class="frase">El bigfoot linense.</span>
     </label>
     <label class="opcion" onclick="mostrarFrase(this)">
       <input type="radio" name="q1" value="c">
-      El Tigre <span class="frase">Solo en el Khan Doner Kebap a las 3AM.</span>
+      El bubu malo <span class="frase">Solo en el Khan Doner Kebab a las 3AM.</span>
     </label>
   </div>
 
@@ -213,11 +213,11 @@
     </label>
     <label class="opcion" onclick="mostrarFrase(this)">
       <input type="radio" name="q2" value="b">
-      Tabaco gratis <span class="frase">¿Te sobra un cigarrito, shurmano?</span>
+      Tabaco gratis <span class="frase">¿Un cigarrito, pichita?</span>
     </label>
     <label class="opcion" onclick="mostrarFrase(this)">
       <input type="radio" name="q2" value="c">
-      Amor eterno <span class="frase">Pero nadie se lo da.</span>
+      Amor eterno <span class="frase">Pero Gema no se lo da.</span>
     </label>
   </div>
 
@@ -226,7 +226,7 @@
     <p>3. ¿Dónde tiene deudas el Lapa?</p>
     <label class="opcion" onclick="mostrarFrase(this)">
       <input type="radio" name="q3" value="a">
-      En el gimnasio <span class="frase">Ni lo pisan sus AirMax.</span>
+      En el gimnasio <span class="frase">No lo pisa , gema lo tiene denunciado.</span>
     </label>
     <label class="opcion" onclick="mostrarFrase(this)">
       <input type="radio" name="q3" value="b">
@@ -234,7 +234,7 @@
     </label>
     <label class="opcion" onclick="mostrarFrase(this)">
       <input type="radio" name="q3" value="c">
-      La universidad <span class="frase">El Lapa no estudia, predica.</span>
+      La universidad/insituto <span class="frase">El Lapa no estudia, da vueltas solo por la linea</span>
     </label>
   </div>
 
@@ -269,8 +269,8 @@
 
     let correctas = 0;
     const respuestasCorrectas = {
-      q1: "b",
-      q2: "b",
+      q1: "b", "a"
+      q2: "b", "a"
       q3: "b"
     };
 
@@ -283,11 +283,11 @@
 
     const resultado = document.getElementById("resultado-lapa");
     if (correctas === 3) {
-      resultado.textContent = "¡Perfecto! Conoces todo sobre el Lapa. Eres un Apaleador Élite.";
+      resultado.textContent = "¡Perfecto! Conoces todo sobre el Lapa. Eres un Apaleado.";
     } else if (correctas === 2) {
-      resultado.textContent = "¡Vas bien! Pero aún no tienes el carnet de Apaleador oficial.";
+      resultado.textContent = "¡Vas bien! Pero aún no tienes el carnet de Apaleado.";
     } else {
-      resultado.textContent = `Solo acertaste ${correctas}/3. ¡Repite el cuestionario, picha!`;
+      resultado.textContent = `Solo acertaste ${correctas}/3. ¡Repite el cuestionario, por el lapita!`;
     }
   });
 </script>
