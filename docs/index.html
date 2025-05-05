@@ -3,463 +3,240 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Samuel Morillo EL lapa apodado - El Lapa El Apaleado</title>
+  <title>Samuel Morillo EL Lapa Apodado - El Lapa El Apaleado</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
-      background-color: #0f0f0f;
-      color: #f2f2f2;
+      background-color: #f7f7f7; /* Fondo más claro */
+      color: #333; /* Color de texto */
       text-align: center;
-      padding: 50px;
+      padding: 50px 20px;
+      margin: 0;
     }
 
     h1 {
       font-size: 3em;
-      color: #ff4747;
+      color: #ff4747; /* Rojo vibrante */
+      margin-bottom: 0.3em;
     }
 
     h2 {
-      color: #ffa500;
+      font-size: 1.7em;
+      color: #ffa500; /* Naranja para destacar */
+      margin-top: 0;
+      font-weight: 500;
     }
 
     p {
-      font-size: 1.2em;
-      margin-top: 20px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
+      font-size: 1.1em;
+      line-height: 1.6;
+      max-width: 720px;
+      margin: 20px auto;
+      color: #333;
     }
 
     img {
-      width: 80%;
-      max-width: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #ff4747;
-      margin: 20px;
-      transition: transform 0.3s;
+      width: 100%;
+      max-width: 700px;
+      border-radius: 12px;
+      margin: 30px auto;
+      display: block;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease;
     }
 
     img:hover {
-      transform: scale(1.05);
+      transform: scale(1.01);
     }
 
     iframe {
-      margin-top: 40px;
       width: 100%;
-      max-width: 560px;
-      height: 384px;
+      max-width: 720px;
+      height: 420px;
+      margin: 40px auto;
+      display: block;
       border: none;
+      border-radius: 10px;
     }
 
     select {
-      padding: 10px;
+      padding: 12px 16px;
       font-size: 1em;
       margin-top: 20px;
-      background-color: #1c1c1c;
-      color: #fff;
-      border: 1px solid #ff4747;
-      border-radius: 5px;
+      background-color: #fff;
+      color: #333;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      appearance: none;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
     }
 
     label {
       display: block;
+      margin-top: 30px;
       margin-bottom: 10px;
-      font-size: 1.2em;
-      color: #ffa500;
-    }
-
-    .bg-text {
-      position: fixed;
-      top: 0;
-      left: 0;
-      font-size: 90px;
-      color: rgba(255, 255, 0, 0.75); /* amarillo */
-      z-index: 0;
-      pointer-events: none;
-      user-select: none;
-      width: 100%;
-      text-align: center;
-      white-space: nowrap;
-      animation: mover 25s linear infinite;
-    }
-
-    .marca-text {
-      position: fixed;
-      bottom: 10%;
-      left: 0;
-      font-size: 50px;
-      color: rgba(255, 255, 255, 0.75); /* color blanco de prueba */
-      z-index: 1;
-      pointer-events: none;
-      user-select: none;
-      width: 100%;
-      text-align: center;
-      white-space: nowrap;
-      animation: marcaMover 20s linear infinite;
-    }
-
-    @keyframes mover {
-      0% { transform: translateX(-100%); }
-      100% { transform: translateX(100%); }
-    }
-
-    @keyframes marcaMover {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
-    }
-
-    footer {
-      margin-top: 50px;
-      font-size: 0.9em;
-      color: #999;
+      font-size: 1.15em;
+      color: #444;
     }
 
     .contador {
       position: fixed;
-      top: 10px;
+      top: 15px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 2em;
-      color: #ff4747;
-      background-color: rgba(0, 0, 0, 0.7);
-      padding: 10px;
-      border-radius: 5px;
-      z-index: 2;
+      font-size: 1.5em;
+      color: #fff;
+      background-color: #ff4747;
+      padding: 10px 20px;
+      border-radius: 8px;
+      z-index: 999;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .pregunta {
+      margin: 30px auto;
+      max-width: 600px;
+      text-align: left;
+    }
+
+    .opcion {
+      display: block;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 10px 0;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .opcion:hover {
+      background-color: #f4f4f4;
+    }
+
+    .opcion.seleccionada {
+      border-color: #ff4747;
+      background-color: #ffecec;
+    }
+
+    .frase {
+      font-style: italic;
+      color: #999;
+      margin-left: 10px;
+    }
+
+    footer {
+      margin-top: 60px;
+      font-size: 0.9em;
+      color: #aaa;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 1.1em;
+      background-color: #007aff;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 30px;
+      transition: background-color 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #005fd4;
     }
   </style>
 </head>
+
 <body>
-
-  <!-- Letras flotantes de fondo -->
-  <div class="bg-text">SAMUEL LAPA • EL APALEADO • VBSE • BIGFOOT • HITLY • EL APALEADO • BUBU MALO • PARKING FOCONA • GEMA ME HACIAS • HABIBI LOPEZ</div>
-
-  <!-- Marcas de fondo adicionales -->
-  <div class="marca-text">Gema me hacías • Habibi Lopez • Rosi no muerdas • RIP (Miguel de Indorama 08-03-2022) • Llanitascaxondasdotcom</div>
 
   <h1>Samuel Morillo</h1>
   <h2>El Lapa El Apaleado</h2>
 
-  <!-- Imagen 1 -->
+  <!-- Imagen del Lapa -->
   <img src="https://i.imgur.com/BHfYCyp.png" alt="Kebab Legendario">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cuestionario del Lapa</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-    .pregunta {
-      margin-bottom: 20px;
-    }
-    .opcion {
-      display: block;
-      border: 2px solid #ccc;
-      border-radius: 8px;
-      padding: 15px;
-      margin: 6px 0;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .opcion:hover {
-      background-color: #f9f9f9;
-    }
-    .opcion input[type="radio"] {
-      display: none;
-    }
-    .opcion.seleccionada {
-      border-color: #ff4747;
-      background-color: #ffe5e5;
-    }
-    .frase {
-      font-style: italic;
-      color: #888;
-      margin-left: 10px;
-    }
-    #resultado-lapa {
-      margin-top: 20px;
-      font-weight: bold;
-    }
-  </style>
-</head>
-<body>
-
-<h2>¿Cuánto sabes del Lapa?</h2>
-<form id="quiz-lapa">
-  <!-- Pregunta 1 -->
-  <div class="pregunta" data-pregunta="q1">
-    <p>1. ¿Cuál es el apodo de Samuel Moriche?</p>
-    <label class="opcion" onclick="mostrarFrase(this)">
-      <input type="radio" name="q1" value="a">
-      El apaleado <span class="frase">Ay el boquerón.</span>
-    </label>
-    <label class="opcion" onclick="mostrarFrase(this)">
-      <input type="radio" name="q1" value="b">
-      El Lapa <span class="frase">El bigfoot linense.</span>
-    </label>
-    <label class="opcion" onclick="mostrarFrase(this)">
-      <input type="radio" name="q1" value="c">
-      El bubu malo <span class="frase">Solo en el Khan Doner Kebab a las 3AM.</span>
-    </label>
-  </div>
-
-  <!-- Pregunta 2 -->
-  <div class="pregunta" data-pregunta="q2">
-    <p>2. ¿Qué suele pedir el Lapa?</p>
-    <label class="opcion" onclick="mostrarFrase(this)">
-      <input type="radio" name="q2" value="a">
-      Dinero <span class="frase">Pa’ un postre, picha.</span>
-    </label>
-    <label class="opcion" onclick="mostrarFrase(this)">
-      <input type="radio" name="q2" value="b">
-      Tabaco gratis <span class="frase">¿Un cigarrito, pichita?</span>
-    </label>
-    <label class="opcion" onclick="mostrarFrase(this)">
-      <input type="radio" name="q2" value="c">
-      Amor eterno <span class="frase">Pero Gema no se lo da.</span>
-    </label>
-  </div>
-
-  <!-- Pregunta 3 -->
-  <div class="pregunta" data-pregunta="q3">
-    <p>3. ¿Dónde tiene deudas el Lapa?</p>
-    <label class="opcion" onclick="mostrarFrase(this)">
-      <input type="radio" name="q3" value="a">
-      En el gimnasio <span class="frase">No lo pisa , gema lo tiene denunciado.</span>
-    </label>
-    <label class="opcion" onclick="mostrarFrase(this)">
-      <input type="radio" name="q3" value="b">
-      Pub de Andrés y Khan Doner Kebab <span class="frase">¡Samuel, págame el durum ya!</span>
-    </label>
-    <label class="opcion" onclick="mostrarFrase(this)">
-      <input type="radio" name="q3" value="c">
-      La universidad/insituto <span class="frase">El Lapa no estudia, da vueltas solo por la linea</span>
-    </label>
-  </div>
-
-  <button type="submit">Enviar respuestas</button>
-</form>
-
-<p id="resultado-lapa"></p>
-
-<script>
-  // Efecto visual para seleccionar las opciones
-  const opciones = document.querySelectorAll('.opcion');
-  opciones.forEach(opcion => {
-    opcion.addEventListener('click', () => {
-      // Desmarcar todas las opciones
-      const grupo = opcion.closest('.pregunta');
-      grupo.querySelectorAll('.opcion').forEach(o => o.classList.remove('seleccionada'));
-      // Marcar la seleccionada
-      opcion.classList.add('seleccionada');
-      opcion.querySelector('input').checked = true;
-    });
-  });
-
-  // Mostrar la frase correspondiente al hacer click
-  function mostrarFrase(opcion) {
-    const frase = opcion.querySelector('.frase');
-    frase.style.display = 'inline'; // Mostrar la frase seleccionada
-  }
-
-  // Evaluar respuestas al enviar el formulario
-  document.getElementById("quiz-lapa").addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    let correctas = 0;
-    const respuestasCorrectas = {
-      q1: "b", 
-      q2: "b", 
-      q3: "b"
-    };
-
-    for (let pregunta in respuestasCorrectas) {
-      const respuesta = document.querySelector(`input[name="${pregunta}"]:checked`);
-      if (respuesta && respuesta.value === respuestasCorrectas[pregunta]) {
-        correctas++;
-      }
-    }
-
-    const resultado = document.getElementById("resultado-lapa");
-    if (correctas === 3) {
-      resultado.textContent = "¡Perfecto! Conoces todo sobre el Lapa. Eres un Apaleado.";
-    } else if (correctas === 2) {
-      resultado.textContent = "¡Vas bien! Pero aún no tienes el carnet de Apaleado.";
-    } else {
-      resultado.textContent = `Solo acertaste ${correctas}/3. ¡Repite el cuestionario, por el lapita!`;
-    }
-  });
-</script>
-
-
-  
   <p><strong>Biografía:</strong><br>
-    Samuel Morillo, también conocido como <em>Bigfoot</em>, es una criatura mítica con un fuerte olor corporal, avistado frecuentemente en zonas urbanas desde el centro hasta el extrarradio de La Línea de la Concepción pidiendo cigarros gratuitos. Ay que viene el lapa , el apaleao! .Con su barriga el boquerón mas pesado . De gema y albita se inventa pasión , pero lo unico real reside en su imaginación!.
+    Samuel Morillo, también conocido como <em>Bigfoot</em>, es una criatura mítica con un fuerte olor corporal, avistado frecuentemente en zonas urbanas desde el centro hasta el extrarradio de La Línea de la Concepción pidiendo cigarros gratuitos. Ay que viene el lapa , el apaleao! Con su barriga el boquerón más pesado. De gema y albita se inventa pasión, pero lo único real reside en su imaginación!
   </p>
 
-  <!-- Video del lapa -->
+  <!-- Video del Lapa -->
   <div style="display: flex; justify-content: center; margin-top: 40px;">
-<iframe src="https://archive.org/embed/e80a7d0d-a690-4402-b64d-f00912e94fbc?loop=1&autoplay=1" width="640" height="480" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
+    <iframe src="https://archive.org/embed/e80a7d0d-a690-4402-b64d-f00912e94fbc?loop=1&autoplay=1" width="640" height="480" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
   </div>
-    EL lapa va contando a todo el mundo con gema tengo algo muy profundo , pero gema ni lo pude ver lo tiene mas bloqueado que el lapa pagando pa BEBER , CON ALBITA TORBE TAMBIEN SE LO INVENTO , EL LAPA DICE QUE EN EL PALENQUE ALGO PASO , pero la verdad es otra que va, lo mas cerca que estuvo fue del kebab.
+
+  <p>
+    El Lapa va contando a todo el mundo con gema tengo algo muy profundo, pero gema ni lo pude ver, lo tiene más bloqueado que el lapa pagando pa BEBER. CON ALBITA TORBE TAMBIÉN SE LO INVENTÓ, EL LAPA DICE QUE EN EL PALENQUE ALGO PASÓ, pero la verdad es otra que va, lo más cerca que estuvo fue del kebab.
   </p>
 
-
-  <!-- Selector de motes-->
+  <!-- Selector de mote -->
   <div>
-    <label for="apodo">Elige un apodo Para el Samuel:</label>
+    <label for="apodo">Elige un apodo para Samuel:</label>
     <select id="apodo" onchange="cambiarCancion()">
-      <option value="default">El Lapa El Apaleado (Por defecto)</option>
+      <option value="default">El Lapa El Apaleado</option>
       <option value="lapa">Lapa</option>
       <option value="apaleado">Apaleado</option>
       <option value="hitly">Hitly</option>
       <option value="bigfoot">Bigfoot</option>
       <option value="vbse">VBSE</option>
-      <option value="bubu">Bubu Malo</option> <!-- NUEVO -->
+      <option value="bubu">Bubu Malo</option>
     </select>
   </div>
 
-  <!-- Video que cambia con el mote del lapa-->
+  <!-- Video que cambia con el mote -->
   <div id="video-container">
-    <iframe id="video-iframe"
-      src="https://www.youtube.com/embed/Kts_f8Oljgw"
-      allow="autoplay; encrypted-media"
-      allowfullscreen>
-    </iframe>
+    <iframe id="video-iframe" src="https://www.youtube.com/embed/Kts_f8Oljgw" allow="autoplay; encrypted-media" allowfullscreen></iframe>
   </div>
+
   <!-- Contador de donaciones -->
   <div class="contador">
     <span id="contador">0</span>€ para la virginidad del VBSE
   </div>
 
- <script>
-  const LIMITE = 60;
-  let contador = parseInt(localStorage.getItem('contador')) || 0;
+  <!-- Audio de celebración -->
+  <audio id="audio-celebracion" src="https://dn721507.ca.archive.org/0/items/audio-2025-05-05-07-53-27/AUDIO-2025-05-05-07-53-27.m4a" preload="auto"></audio>
 
-  function actualizarVisual() {
-    document.getElementById('contador').textContent = contador;
-  }
+  <script>
+    const LIMITE = 60;
+    let contador = parseInt(localStorage.getItem('contador')) || 0;
 
-  function aumentarContador() {
-    contador++;
+    function actualizarVisual() {
+      document.getElementById('contador').textContent = contador;
+    }
 
-    if (contador >= LIMITE) {
-      alert("LLegamos a 60€ ,¡Hoy Al Querubín le pagan el postre");
-      document.querySelector('.contador').innerHTML = "🎉 ¡Al Querubín le pagan el postre! 🎉";
+    function aumentarContador() {
+      contador++;
 
-      setTimeout(() => {
-        contador = 0;
+      if (contador >= LIMITE) {
+        alert("¡Hoy Al Querubín le pagan el postre!");
+        document.querySelector('.contador').innerHTML = "🎉 ¡Al Querubín le pagan el postre! 🎉";
+        // Reproducir audio de celebración
+        const audio = document.getElementById('audio-celebracion');
+        audio.play();
+
+        setTimeout(() => {
+          contador = 0;
+          localStorage.setItem('contador', contador);
+          document.querySelector('.contador').innerHTML = '<span id="contador">0</span>';
+        }, 1500);
+      } else {
         localStorage.setItem('contador', contador);
-        document.querySelector('.contador').innerHTML = '<span id="contador">0</span>';
-      }, 1500);
-    } else {
-      localStorage.setItem('contador', contador);
-      actualizarVisual();
-    }
-  }
-
-  // Mostrar el valor guardado al cargar
-  actualizarVisual();
-
-  // Detectar clic para aumentar
-  document.querySelector('.contador').addEventListener('click', aumentarContador);
-</script>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Samuel Morillo El Lapa</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #0f0f0f;
-      color: #f2f2f2;
-      text-align: center;
-      padding: 50px;
+        actualizarVisual();
+      }
     }
 
-    h1 {
-      font-size: 3em;
-      color: #ff4747;
-    }
+    // Mostrar el valor guardado al cargar
+    actualizarVisual();
 
-    h2 {
-      font-size: 1.5em;
-      color: #ffa500;
-      text-align: left;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-      line-height: 1.6em;
-    }
-
-    button {
-      padding: 15px 30px;
-      font-size: 1.2em;
-      background-color: #ff4747;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 30px;
-    }
-
-    button:hover {
-      background-color: #ff0000;
-    }
-  </style>
-</head>
-
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Samuel Morillo El Lapa</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #0f0f0f;
-      color: #f2f2f2;
-      text-align: center;
-      padding: 50px;
-    }
-
-    h1 {
-      font-size: 3em;
-      color: #ff4747;
-    }
-
-    h2 {
-      font-size: 1.5em;
-      color: #ffa500;
-      text-align: left;
-      max-width: 800px;
-      margin: 0 auto;
-      line-height: 1.6em;
-    }
-
-    button {
-      padding: 15px 30px;
-      font-size: 1.2em;
-      background-color: #ff4747;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 30px;
-    }
-
-    button:hover {
-      background-color: #ff0000;
-    }
-  </style>
-</head>
-
+    // Detectar clic para aumentar
+    document.querySelector('.contador').addEventListener('click', aumentarContador);
+  </script>
 <button onclick="window.open('https://jrhg15.github.io/mehaciaslapa/index.html', '_blank')">
  Pulsa este botón para conocer más sobre la historia de Samuel El Lapa y Gema me hacías
 </button>
-
-  <!-- Script para cambiar engacahr cada mote del lapa con una cancion -->
+</body>
+</html>
+<!-- Script para engachar cada mote del lapa con una cancion -->
   <script>
     function cambiarCancion() {
       const apodo = document.getElementById('apodo').value;
@@ -504,10 +281,10 @@
 
       // Mostrar mensaje boton en la página
       var mensaje = document.getElementById('mensaje');
-      mensaje.innerHTML = "¡LAPA EL APALEADO has sido denunciado por Gema Me Hacías!";
+      mensaje.innerHTML = "¡LAPA EL APALEADO!, has sido denunciado por Gema Me Hacías";
 
       // Mostrar una alerta también
-      alert("¡Has activado el Lapa! Apaleado denunciado por Gema Me Hacías.");
+      alert("¡Has activado al Lapa Apaleado!, denunciado por Gema Me Hacías.");
 
       // Efecto de botón
       this.classList.add('click-effect');
@@ -516,47 +293,7 @@
       }, 500);
     });
   </script>
-<!-- Formulario para subir memes o fan art -->
-  <h2>¡Sube tus mejores fotos de El Lapa!</h2>
-  <p>¡Recuerdanos a este apaleado,siempre pidiendo tabaco gratis!</p>
-  <form id="form-fanart" enctype="multipart/form-data" action="#" method="POST">
-    <label for="user-file">Selecciona tu imagen (meme o fan art):</label>
-    <input type="file" name="user-image" id="user-file" accept="image/*" required>
-    <button type="submit">Subir Imagen</button>
-  </form>
-
-  <!-- Galería del apaleado -->
-  <h2>Sube tus mejores fotos del lapa el apaleado</h2>
-  <div class="galeria" id="gallery">
-    <!-- Aquí se mostrarán las imágenes subidas -->
-  </div>
-
-  <!-- Script para subir y mostrar las imágenes en la galería -->
-  <script>
-    const form = document.getElementById('form-fanart');
-    const gallery = document.getElementById('gallery');
-
-    form.addEventListener('submit', function(event) {
-      event.preventDefault();
-
-      // Obtener el archivo de imagen
-      const fileInput = document.getElementById('user-file');
-      const file = fileInput.files[0];
-
-      if (file) {
-        // Crear una URL para la imagen
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const imgElement = document.createElement('img');
-          imgElement.src = e.target.result;
-          gallery.appendChild(imgElement);
-        }
-        reader.readAsDataURL(file);
-      }
-    });
-  </script>
-
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Escape de Gema Me Hacías</title>
@@ -701,19 +438,20 @@
         window.addEventListener('keydown', moveGema);
     </script>
 
+
 <head>
     <meta charset="UTF-8">
     <title>Los Slots del LAPA</title>
     <style>
         body {
-            background: radial-gradient(circle, #222 0%, #000 100%);
+            background: #f7f7f7;
             font-family: 'Arial Black', sans-serif;
             color: white;
             text-align: center;
             padding-top: 50px;
         }
         .machine {
-            background: linear-gradient(to bottom, #555, #222);
+            background: #f9f9f9;
             border: 10px solid #ccc;
             border-radius: 20px;
             width: 420px;
@@ -812,7 +550,7 @@
     </style>
 </head>
 <body>
-    <h1>Lin-king del Lapa</h1>
+    <h1>Linking SLOT del Lapa</h1>
     <div class="machine">
         <div class="slots">
             <div class="slot" id="slot1">?</div>
@@ -825,7 +563,7 @@
     </div>
 
     <script>
-        const motes = ["Querubín", "Apaleado", "Lapa", "Hitly", "VBSE"];
+        const motes = ["Querubín", "Apaleado", "Lapa", "Hitly", "VBSE","Postre"];
         const slots = [
             document.getElementById('slot1'),
             document.getElementById('slot2'),
@@ -839,7 +577,7 @@
         document.querySelector(".machine").appendChild(lights);
 
         const spinSound = new Audio("https://www.myinstants.com/media/sounds/slot-machine-spin.mp3");
-        const winSound = new Audio("https://www.myinstants.com/media/sounds/jackpot.mp3");
+        const winSound = new Audio("https://dn721507.ca.archive.org/0/items/audio-2025-05-05-07-53-27/AUDIO-2025-05-05-07-53-27.m4a");
 
         function spin(slotElement, duration) {
             return new Promise(resolve => {
@@ -872,7 +610,7 @@
 
             let final1, final2, final3;
 
-            if (Math.random() < 0.4) { // 50% de probabilidad de ganar
+            if (Math.random() < 0.3) { // 30% de probabilidad de ganar
                 const chosen = motes[Math.floor(Math.random() * motes.length)];
                 final1 = final2 = final3 = chosen;
                 await Promise.all([
@@ -908,6 +646,7 @@
             setTimeout(() => lights.style.display = "none", 2000);
         });
     </script>
+
   <h1>RULETA LAPARIANA</h1>
 <!-- CONTENEDOR DE LA RULETA -->
 <div style="text-align:center; margin-top:50px;">
@@ -1069,7 +808,7 @@ function determinarResultado() {
   } else if (colors[elegido] === colors[numeroGanador]) {
     mensaje = "¡ROJOS NO! Una calada pal Lapa ";
   } else {
-    mensaje = "Has fallado, APALEADO";
+    mensaje = "Has fallado, no hay postre APALEADO";
   }
 
   document.getElementById('resultado').textContent = "Número ganador: " + numeroGanador + " - " + mensaje;
@@ -1078,56 +817,3 @@ function determinarResultado() {
 // Inicializar ruleta
 drawRoulette();
 </script>
-
-
-</body>
-</html>
-
-  <div id="comentarios">
-  <h2>Deja tu comentario:</h2>
-  <textarea id="nuevo-comentario" placeholder="Escribe tu comentario aquí..."></textarea>
-  <button onclick="guardarComentario()">Comentar</button>
-
-  <h3>Comentarios:</h3>
-  <ul id="lista-comentarios">
-    <!-- Comentarios se agregarán aquí -->
-  </ul>
-</div>
-
-<script>
-  // Cargar los comentarios del LocalStorage
-  window.onload = function() {
-    cargarComentarios();
-  };
-
-  function cargarComentarios() {
-    const comentarios = JSON.parse(localStorage.getItem("comentarios")) || [];
-    const listaComentarios = document.getElementById("lista-comentarios");
-    listaComentarios.innerHTML = "";
-    comentarios.forEach(function(comentario) {
-      const li = document.createElement("li");
-      li.textContent = comentario;
-      listaComentarios.appendChild(li);
-    });
-  }
-
-  function guardarComentario() {
-    const comentario = document.getElementById("nuevo-comentario").value;
-    if (comentario.trim() !== "") {
-      let comentarios = JSON.parse(localStorage.getItem("comentarios")) || [];
-      comentarios.push(comentario);
-      localStorage.setItem("comentarios", JSON.stringify(comentarios));
-
-      cargarComentarios();  // Recargar la lista de comentarios
-      document.getElementById("nuevo-comentario").value = "";  // Limpiar el campo de texto
-    }
-  }
-</script>
-
-
-  <footer>
-    <p>© 2025 Apaleado virgin records -- Tengo la casa con cucarachas y ratas prendía.</p>
-  </footer>
-
-</body>
-</html>
