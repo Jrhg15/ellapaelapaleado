@@ -443,7 +443,11 @@
         setInterval(() => {
             if (!isGameOver) {
                 moveLapa();
-                updateScore();
+                updateScore( if (score >= 1000) {
+    isGameOver = true;
+    gameMessage.textContent = "¡Gema ha escapado del Lapa!";
+    alert("ENHORABUENA GEMA CONSEGUISTE ESCAPAR DEL LAPA");
+});
             }
         }, 100);
 
