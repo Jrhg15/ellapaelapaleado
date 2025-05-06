@@ -430,22 +430,29 @@
             scoreDisplay.textContent = `Puntuación final: ${score}`;
         }
 
-        // Actualizar la puntuación
-        function updateScore() {
-            if (!isGameOver) {
-                score++;
-                scoreDisplay.textContent = `Puntuación: ${score}`;
-            }
-        }
+       // Actualizar la puntuación
+function updateScore() {
+    if (!isGameOver) {
+        score++;
+        scoreDisplay.textContent = `Puntuación: ${score}`;
 
-        // Iniciar el juego
-        setInterval(() => {
-            if (!isGameOver) {
-                moveLapa();
-                updateScore( if (score >= 1000) {
-    isGameOver = true;
-    gameMessage.textContent = "¡Gema ha escapado del Lapa!";
-    alert("ENHORABUENA GEMA CONSEGUISTE ESCAPAR DEL LAPA");
+        // Verificar si se alcanzaron los 1000 puntos
+        if (score >= 1000) {
+            isGameOver = true;
+            gameMessage.textContent = "¡Gema ha escapado del Lapa!";
+            alert("ENHORABUENA GEMA CONSEGUISTE ESCAPAR DEL LAPA");
+        }
+    }
+}
+
+// Iniciar el juego
+setInterval(() => {
+    if (!isGameOver) {
+        moveLapa();
+        updateScore(); // Llamar a la función correctamente
+    }
+}, 100);
+
 });
             }
         }, 100);
