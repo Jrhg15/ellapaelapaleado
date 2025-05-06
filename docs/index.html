@@ -316,160 +316,180 @@
     });
   </script>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Escape de Gema Me Hacías</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #333;
-            color: white;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escape de Gema</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #222;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
 
-        #gameArea {
-            position: relative;
-            width: 800px;
-            height: 400px;
-            margin: 50px auto;
-            border: 2px solid #fff;
-            background-color: #111;
-        }
+    #gameArea {
+      position: relative;
+      width: 90vw;
+      max-width: 800px;
+      height: 400px;
+      margin: 20px auto;
+      border: 3px solid white;
+      background-color: #111;
+    }
 
-        .character {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            background-color: red;
-            color: white;
-            text-align: center;
-            line-height: 50px;
-            font-size: 18px;
-        }
+    .character {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-color: red;
+      color: white;
+      text-align: center;
+      line-height: 50px;
+      border-radius: 10px;
+    }
 
-        .chaser {
-            background-color: green;
-        }
+    .chaser {
+      background-color: green;
+    }
 
-        .message {
-            position: absolute;
-            width: 100%;
-            top: 10px;
-            text-align: center;
-            font-size: 20px;
-            color: #fff;
-        }
+    #controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 10px;
+      gap: 5px;
+    }
 
-        .score {
-            position: absolute;
-            bottom: 10px;
-            width: 100%;
-            text-align: center;
-            font-size: 18px;
-            color: #fff;
-        }
-    </style>
+    .control-row {
+      display: flex;
+      gap: 5px;
+    }
+
+    button {
+      padding: 15px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background-color: #444;
+      color: white;
+    }
+
+    .message, .score {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 600px) {
+      .character {
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        font-size: 14px;
+      }
+
+      button {
+        padding: 10px;
+        font-size: 16px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div id="gameArea">
-        <div class="message" id="gameMessage">Gema Me Hacías intenta escapar de Samuel Lapa El Apaleado</div>
-        <div class="character" id="gema" style="top: 50px; left: 50px;">Gema</div>
-        <div class="character chaser" id="lapa" style="top: 50px; left: 700px;">Lapa</div>
-        <div class="score" id="score">Puntuación: 0</div>
-    </div>
 
- <script>
+  <div class="message" id="gameMessage">¡Gema escapa del Lapa!</div>
+
+  <div id="gameArea">
+    <div class="character" id="gema" style="top: 50px; left: 50px;">Gema</div>
+    <div class="character chaser" id="lapa" style="top: 50px; left: 700px;">Lapa</div>
+  </div>
+
+  <div id="controls">
+    <div class="control-row">
+      <button onclick="moveGema('up')">⬆️</button>
+    </div>
+    <div class="control-row">
+      <button onclick="moveGema('left')">⬅️</button>
+      <button onclick="moveGema('down')">⬇️</button>
+      <button onclick="moveGema('right')">➡️</button>
+    </div>
+  </div>
+
+  <div class="score" id="score">Puntuación: 0</div>
+
+  <script>
     const gema = document.getElementById('gema');
     const lapa = document.getElementById('lapa');
     const gameMessage = document.getElementById('gameMessage');
     const scoreDisplay = document.getElementById('score');
-    
+
     let gemaX = 50, gemaY = 50, lapaX = 700, lapaY = 50;
     let score = 0;
     let isGameOver = false;
 
-    function moveGema(e) {
-        if (isGameOver) return;
-        
-        if (e.key === 'w' || e.key === 'W') {
-            gemaY -= 10;
-        } else if (e.key === 's' || e.key === 'S') {
-            gemaY += 10;
-        } else if (e.key === 'a' || e.key === 'A') {
-            gemaX -= 10;
-        } else if (e.key === 'd' || e.key === 'D') {
-            gemaX += 10;
-        }
+    function moveGema(direction) {
+      if (isGameOver) return;
 
-        // Limitar movimiento dentro del área de juego
-        gemaX = Math.max(0, Math.min(gemaX, 750));
-        gemaY = Math.max(0, Math.min(gemaY, 350));
+      switch(direction) {
+        case 'up': gemaY -= 10; break;
+        case 'down': gemaY += 10; break;
+        case 'left': gemaX -= 10; break;
+        case 'right': gemaX += 10; break;
+      }
 
-        gema.style.top = gemaY + 'px';
-        gema.style.left = gemaX + 'px';
+      const area = document.getElementById('gameArea');
+      gemaX = Math.max(0, Math.min(gemaX, area.clientWidth - 50));
+      gemaY = Math.max(0, Math.min(gemaY, area.clientHeight - 50));
+
+      gema.style.left = gemaX + 'px';
+      gema.style.top = gemaY + 'px';
     }
+
+    window.addEventListener('keydown', function(e) {
+      if (e.key === 'w' || e.key === 'ArrowUp') moveGema('up');
+      if (e.key === 's' || e.key === 'ArrowDown') moveGema('down');
+      if (e.key === 'a' || e.key === 'ArrowLeft') moveGema('left');
+      if (e.key === 'd' || e.key === 'ArrowRight') moveGema('right');
+    });
 
     function moveLapa() {
-        if (isGameOver) return;
+      if (isGameOver) return;
 
-        // Lapa persigue a Gema
-        if (lapaX < gemaX) {
-            lapaX += 2;
-        } else if (lapaX > gemaX) {
-            lapaX -= 2;
-        }
-        if (lapaY < gemaY) {
-            lapaY += 2;
-        } else if (lapaY > gemaY) {
-            lapaY -= 2;
-        }
+      if (lapaX < gemaX) lapaX += 2;
+      else if (lapaX > gemaX) lapaX -= 2;
 
-        lapa.style.top = lapaY + 'px';
-        lapa.style.left = lapaX + 'px';
-        
-        // Verificar colisión
-        if (Math.abs(lapaX - gemaX) < 50 && Math.abs(lapaY - gemaY) < 50) {
-            gameOver();
-        }
-    }
+      if (lapaY < gemaY) lapaY += 2;
+      else if (lapaY > gemaY) lapaY -= 2;
 
-    function gameOver() {
+      lapa.style.left = lapaX + 'px';
+      lapa.style.top = lapaY + 'px';
+
+      if (Math.abs(lapaX - gemaX) < 50 && Math.abs(lapaY - gemaY) < 50) {
         isGameOver = true;
-        gameMessage.textContent = "Lapa El Apaleado se masturbará con deep-fakes de Gema me hacias";
+        gameMessage.textContent = "¡El Lapa atrapó a Gema!";
         scoreDisplay.textContent = `Puntuación final: ${score}`;
+      }
     }
 
-    // Actualizar la puntuación
     function updateScore() {
-        if (!isGameOver) {
-            score++;
-            scoreDisplay.textContent = `Puntuación: ${score}`;
-
-            // Verificar si se alcanzaron los 1000 puntos
-            if (score >= 1000) {
-                isGameOver = true;
-                gameMessage.textContent = "¡Gema ha escapado del Lapa!";
-                alert("ENHORABUENA GEMA CONSEGUISTE ESCAPAR DEL LAPA");
-            }
+      if (!isGameOver) {
+        score++;
+        scoreDisplay.textContent = `Puntuación: ${score}`;
+        if (score >= 1000) {
+          isGameOver = true;
+          gameMessage.textContent = "¡Gema ha escapado del Lapa!";
+          alert("¡Victoria! Gema ha escapado.");
         }
+      }
     }
 
-    // Iniciar el juego
     setInterval(() => {
-        if (!isGameOver) {
-            moveLapa();
-            updateScore(); // Llamar a la función correctamente
-        }
+      moveLapa();
+      updateScore();
     }, 100);
+  </script>
 
-    // Escuchar las teclas para mover a Gema
-    window.addEventListener('keydown', moveGema);
-</script>
-
-
-
-<head>
+</body>
     <meta charset="UTF-8">
     <title>Los Slots del LAPA</title>
     <style>
