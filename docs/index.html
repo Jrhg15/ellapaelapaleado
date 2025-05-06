@@ -369,97 +369,94 @@
         <div class="score" id="score">Puntuación: 0</div>
     </div>
 
-    <script>
-        const gema = document.getElementById('gema');
-        const lapa = document.getElementById('lapa');
-        const gameMessage = document.getElementById('gameMessage');
-        const scoreDisplay = document.getElementById('score');
+ <script>
+    const gema = document.getElementById('gema');
+    const lapa = document.getElementById('lapa');
+    const gameMessage = document.getElementById('gameMessage');
+    const scoreDisplay = document.getElementById('score');
+    
+    let gemaX = 50, gemaY = 50, lapaX = 700, lapaY = 50;
+    let score = 0;
+    let isGameOver = false;
+
+    function moveGema(e) {
+        if (isGameOver) return;
         
-        let gemaX = 50, gemaY = 50, lapaX = 700, lapaY = 50;
-        let score = 0;
-        let isGameOver = false;
-
-        function moveGema(e) {
-            if (isGameOver) return;
-            
-             if (e.key === 'w' || e.key === 'W') {
-                gemaY -= 10;
-            } else if (e.key === 's' || e.key === 'S') {
-                gemaY += 10;
-            } else if (e.key === 'a' || e.key === 'A') {
-                gemaX -= 10;
-            } else if (e.key === 'd' || e.key === 'D') {
-                gemaX += 10;
-            }
-
-            // Limitar movimiento dentro del área de juego
-            gemaX = Math.max(0, Math.min(gemaX, 750));
-            gemaY = Math.max(0, Math.min(gemaY, 350));
-
-            gema.style.top = gemaY + 'px';
-            gema.style.left = gemaX + 'px';
+        if (e.key === 'w' || e.key === 'W') {
+            gemaY -= 10;
+        } else if (e.key === 's' || e.key === 'S') {
+            gemaY += 10;
+        } else if (e.key === 'a' || e.key === 'A') {
+            gemaX -= 10;
+        } else if (e.key === 'd' || e.key === 'D') {
+            gemaX += 10;
         }
 
-        function moveLapa() {
-            if (isGameOver) return;
+        // Limitar movimiento dentro del área de juego
+        gemaX = Math.max(0, Math.min(gemaX, 750));
+        gemaY = Math.max(0, Math.min(gemaY, 350));
 
-            // Lapa persigue a Gema
-            if (lapaX < gemaX) {
-                lapaX += 2;
-            } else if (lapaX > gemaX) {
-                lapaX -= 2;
-            }
-            if (lapaY < gemaY) {
-                lapaY += 2;
-            } else if (lapaY > gemaY) {
-                lapaY -= 2;
-            }
+        gema.style.top = gemaY + 'px';
+        gema.style.left = gemaX + 'px';
+    }
 
-            lapa.style.top = lapaY + 'px';
-            lapa.style.left = lapaX + 'px';
-            
-            // Verificar colisión
-            if (Math.abs(lapaX - gemaX) < 50 && Math.abs(lapaY - gemaY) < 50) {
-                gameOver();
-            }
+    function moveLapa() {
+        if (isGameOver) return;
+
+        // Lapa persigue a Gema
+        if (lapaX < gemaX) {
+            lapaX += 2;
+        } else if (lapaX > gemaX) {
+            lapaX -= 2;
+        }
+        if (lapaY < gemaY) {
+            lapaY += 2;
+        } else if (lapaY > gemaY) {
+            lapaY -= 2;
         }
 
-        function gameOver() {
-            isGameOver = true;
-            gameMessage.textContent = "Lapa El Apaleado se masturbará con deep-fakes de Gema me hacias";
-            scoreDisplay.textContent = `Puntuación final: ${score}`;
-        }
-
-       // Actualizar la puntuación
-function updateScore() {
-    if (!isGameOver) {
-        score++;
-        scoreDisplay.textContent = `Puntuación: ${score}`;
-
-        // Verificar si se alcanzaron los 1000 puntos
-        if (score >= 1000) {
-            isGameOver = true;
-            gameMessage.textContent = "¡Gema ha escapado del Lapa!";
-            alert("ENHORABUENA GEMA CONSEGUISTE ESCAPAR DEL LAPA");
+        lapa.style.top = lapaY + 'px';
+        lapa.style.left = lapaX + 'px';
+        
+        // Verificar colisión
+        if (Math.abs(lapaX - gemaX) < 50 && Math.abs(lapaY - gemaY) < 50) {
+            gameOver();
         }
     }
-}
 
-// Iniciar el juego
-setInterval(() => {
-    if (!isGameOver) {
-        moveLapa();
-        updateScore(); // Llamar a la función correctamente
+    function gameOver() {
+        isGameOver = true;
+        gameMessage.textContent = "Lapa El Apaleado se masturbará con deep-fakes de Gema me hacias";
+        scoreDisplay.textContent = `Puntuación final: ${score}`;
     }
-}, 100);
 
-});
+    // Actualizar la puntuación
+    function updateScore() {
+        if (!isGameOver) {
+            score++;
+            scoreDisplay.textContent = `Puntuación: ${score}`;
+
+            // Verificar si se alcanzaron los 1000 puntos
+            if (score >= 1000) {
+                isGameOver = true;
+                gameMessage.textContent = "¡Gema ha escapado del Lapa!";
+                alert("ENHORABUENA GEMA CONSEGUISTE ESCAPAR DEL LAPA");
             }
-        }, 100);
+        }
+    }
 
-        // Escuchar las teclas para mover a Gema
-        window.addEventListener('keydown', moveGema);
-    </script>
+    // Iniciar el juego
+    setInterval(() => {
+        if (!isGameOver) {
+            moveLapa();
+            updateScore(); // Llamar a la función correctamente
+        }
+    }, 100);
+
+    // Escuchar las teclas para mover a Gema
+    window.addEventListener('keydown', moveGema);
+</script>
+
 
 
 <head>
