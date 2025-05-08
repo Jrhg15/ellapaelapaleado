@@ -731,175 +731,194 @@
   <h1>RULETA LAPARIANA</h1>
 <!-- CONTENEDOR DE LA RULETA -->
 <div style="text-align:center; margin-top:50px;">
-  <canvas id="canvas-ruleta" width="500" height="500" style="background-color:#0f0f0f; border:2px solid #ff4747; border-radius:50%;"></canvas>
-  
-  <div style="margin-top:20px;">
-    <label for="numero">Elige tu número:</label>
-    <select id="numero">
-      <!-- Números de ruleta clásica (0-36) -->
-      <option value="0">0</option>
-      <option value="32">32</option>
-      <option value="15">15</option>
-      <option value="19">19</option>
-      <option value="4">4</option>
-      <option value="21">21</option>
-      <option value="2">2</option>
-      <option value="25">25</option>
-      <option value="17">17</option>
-      <option value="34">34</option>
-      <option value="6">6</option>
-      <option value="27">27</option>
-      <option value="13">13</option>
-      <option value="36">36</option>
-      <option value="11">11</option>
-      <option value="30">30</option>
-      <option value="8">8</option>
-      <option value="23">23</option>
-      <option value="10">10</option>
-      <option value="5">5</option>
-      <option value="24">24</option>
-      <option value="16">16</option>
-      <option value="33">33</option>
-      <option value="1">1</option>
-      <option value="20">20</option>
-      <option value="14">14</option>
-      <option value="31">31</option>
-      <option value="9">9</option>
-      <option value="22">22</option>
-      <option value="18">18</option>
-      <option value="29">29</option>
-      <option value="7">7</option>
-      <option value="28">28</option>
-      <option value="12">12</option>
-      <option value="35">35</option>
-      <option value="3">3</option>
-      <option value="26">26</option>
-    </select>
+<head>
+  <meta charset="UTF-8">
+  <title>RULETA LAPARIANA</title>
+  <style>
+    body {
+      color: white;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      margin-top: 30px;
+    }
+    canvas {
+      background-color: #0f0f0f;
+      border: 2px solid #ff4747;
+      border-radius: 50%;
+    }
+    button {
+      margin-left: 20px;
+      padding: 10px;
+      background: #ff4747;
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+      font-size: 1em;
+      cursor: pointer;
+    }
+    select {
+      font-size: 1em;
+    }
+    #resultado {
+      margin-top: 20px;
+      font-size: 1.5em;
+      color: #ffa500;
+    }
+  </style>
+</head>
+<body>
 
-    <button onclick="tirarRuleta()" style="margin-left:20px; padding:10px; background:#ff4747; border:none; border-radius:5px; color:#fff; font-size:1em;">¡TIRAR!</button>
-  </div>
+<canvas id="canvas-ruleta" width="500" height="500"></canvas>
 
-  <p id="resultado" style="margin-top:20px; font-size:1.5em; color:#ffa500;"></p>
+<div style="margin-top:20px;">
+  <label for="numero">Elige tu número:</label>
+  <select id="numero">
+    <option value="0">0</option><option value="32">32</option><option value="15">15</option>
+    <option value="19">19</option><option value="4">4</option><option value="21">21</option>
+    <option value="2">2</option><option value="25">25</option><option value="17">17</option>
+    <option value="34">34</option><option value="6">6</option><option value="27">27</option>
+    <option value="13">13</option><option value="36">36</option><option value="11">11</option>
+    <option value="30">30</option><option value="8">8</option><option value="23">23</option>
+    <option value="10">10</option><option value="5">5</option><option value="24">24</option>
+    <option value="16">16</option><option value="33">33</option><option value="1">1</option>
+    <option value="20">20</option><option value="14">14</option><option value="31">31</option>
+    <option value="9">9</option><option value="22">22</option><option value="18">18</option>
+    <option value="29">29</option><option value="7">7</option><option value="28">28</option>
+    <option value="12">12</option><option value="35">35</option><option value="3">3</option>
+    <option value="26">26</option>
+  </select>
+  <button onclick="tirarRuleta()">¡TIRAR!</button>
 </div>
 
+<p id="resultado"></p>
+
 <script>
-// Configuración ruleta
-const canvas = document.getElementById('canvas-ruleta');
-const ctx = canvas.getContext('2d');
-const width = canvas.width;
-const height = canvas.height;
-const centerX = width / 2;
-const centerY = height / 2;
-const radius = 230;
-const numbers = [
-  0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,
-  14,31,9,22,18,29,7,28,12,35,3,26
-];
+  const canvas = document.getElementById('canvas-ruleta');
+  const ctx = canvas.getContext('2d');
+  const width = canvas.width;
+  const height = canvas.height;
+  const centerX = width / 2;
+  const centerY = height / 2;
+  const radius = 230;
 
-// Colores de cada número (0 verde, otros rojos/negros)
-const colors = {
-  0: 'green',
-  32: 'red', 15: 'black', 19: 'red', 4: 'black', 21: 'red', 2: 'black', 25: 'red', 17: 'black',
-  34: 'red', 6: 'black', 27: 'red', 13: 'black', 36: 'red', 11: 'black', 30: 'red', 8: 'black',
-  23: 'red', 10: 'black', 5: 'red', 24: 'black', 16: 'red', 33: 'black', 1: 'red', 20: 'black',
-  14: 'red', 31: 'black', 9: 'red', 22: 'black', 18: 'red', 29: 'black', 7: 'red', 28: 'black',
-  12: 'red', 35: 'black', 3: 'red', 26: 'black'
-};
+  const numbers = [
+    0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,
+    14,31,9,22,18,29,7,28,12,35,3,26
+  ];
 
-let startAngle = 0;
-let spinning = false;
-let spinAngle = 0;
-let ballAngle = 0;
-let ballSpeed = 0;
+  const colors = {
+    0: 'green',
+    32: 'red', 15: 'black', 19: 'red', 4: 'black', 21: 'red', 2: 'black', 25: 'red', 17: 'black',
+    34: 'red', 6: 'black', 27: 'red', 13: 'black', 36: 'red', 11: 'black', 30: 'red', 8: 'black',
+    23: 'red', 10: 'black', 5: 'red', 24: 'black', 16: 'red', 33: 'black', 1: 'red', 20: 'black',
+    14: 'red', 31: 'black', 9: 'red', 22: 'black', 18: 'red', 29: 'black', 7: 'red', 28: 'black',
+    12: 'red', 35: 'black', 3: 'red', 26: 'black'
+  };
 
-// Dibujar ruleta
-function drawRoulette() {
-  ctx.clearRect(0, 0, width, height);
-  const sliceAngle = 2 * Math.PI / numbers.length;
+  let startAngle = 0;
+  let spinning = false;
+  let spinFrames = 0;
+  let maxFrames = 240; // más duración
+  let finalBallAngle = 0;
+  let chosenIndex = 0;
 
-  for (let i = 0; i < numbers.length; i++) {
-    const angle = startAngle + i * sliceAngle;
-    ctx.beginPath();
-    ctx.moveTo(centerX, centerY);
-    ctx.arc(centerX, centerY, radius, angle, angle + sliceAngle);
-    ctx.closePath();
-    ctx.fillStyle = colors[numbers[i]];
-    ctx.fill();
-    ctx.strokeStyle = '#fff';
-    ctx.stroke();
+  function drawRoulette(ballAngle) {
+    ctx.clearRect(0, 0, width, height);
+    const sliceAngle = 2 * Math.PI / numbers.length;
 
-    // Texto del número
-    ctx.save();
-    ctx.translate(centerX, centerY);
-    ctx.rotate(angle + sliceAngle / 2);
-    ctx.textAlign = "right";
-    ctx.fillStyle = "white";
-    ctx.font = "bold 18px Arial";
-    ctx.fillText(numbers[i], radius - 10, 10);
-    ctx.restore();
-  }
+    for (let i = 0; i < numbers.length; i++) {
+      const angle = startAngle + i * sliceAngle;
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.arc(centerX, centerY, radius, angle, angle + sliceAngle);
+      ctx.closePath();
+      ctx.fillStyle = colors[numbers[i]];
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.stroke();
 
-  // Dibuja bola
-  const ballX = centerX + (radius - 30) * Math.cos(ballAngle);
-  const ballY = centerY + (radius - 30) * Math.sin(ballAngle);
-  ctx.beginPath();
-  ctx.arc(ballX, ballY, 8, 0, 2 * Math.PI);
-  ctx.fillStyle = "white";
-  ctx.fill();
-}
-
-// Animar ruleta
-function animate() {
-  if (spinning) {
-    startAngle += spinAngle;
-    ballAngle -= ballSpeed;
-    spinAngle *= 0.98; // frenar
-    ballSpeed *= 0.985;
-    if (spinAngle < 0.002) {
-      spinning = false;
-      determinarResultado();
+      ctx.save();
+      ctx.translate(centerX, centerY);
+      ctx.rotate(angle + sliceAngle / 2);
+      ctx.textAlign = "right";
+      ctx.fillStyle = "white";
+      ctx.font = "bold 18px Arial";
+      ctx.fillText(numbers[i], radius - 10, 10);
+      ctx.restore();
     }
-    drawRoulette();
-    requestAnimationFrame(animate);
-  }
-}
 
-// Tirar ruleta
-function tirarRuleta() {
-  if (!spinning) {
-    spinAngle = Math.random() * 0.3 + 0.25;
-    ballSpeed = Math.random() * 0.3 + 0.25;
+    const ballX = centerX + (radius - 30) * Math.cos(ballAngle);
+    const ballY = centerY + (radius - 30) * Math.sin(ballAngle);
+    ctx.beginPath();
+    ctx.arc(ballX, ballY, 8, 0, 2 * Math.PI);
+    ctx.fillStyle = "white";
+    ctx.fill();
+  }
+
+  function animate() {
+    if (spinning) {
+      const t = spinFrames / maxFrames;
+      const ease = 1 - Math.pow(1 - t, 3); // ease-out
+      const totalRotation = 4 * 2 * Math.PI; // más lento
+      startAngle = totalRotation * (1 - ease);
+
+      const sliceAngle = 2 * Math.PI / numbers.length;
+      const centerOfSlice = chosenIndex * sliceAngle + sliceAngle / 2;
+      finalBallAngle = startAngle + centerOfSlice;
+
+      drawRoulette(finalBallAngle);
+      spinFrames++;
+
+      if (spinFrames <= maxFrames) {
+        requestAnimationFrame(animate);
+      } else {
+        spinning = false;
+        mostrarResultado();
+      }
+    }
+  }
+
+  function tirarRuleta() {
+    if (spinning) return;
+
+    let elegido = parseInt(document.getElementById('numero').value);
+    let ganador = Math.random() < 0.3 ? elegido : elegirOtro(elegido);
+    chosenIndex = numbers.indexOf(ganador);
+
+    spinFrames = 0;
+    startAngle = 0;
     spinning = true;
     animate();
   }
-}
 
-// Determinar resultado final
-function determinarResultado() {
-  const sliceAngle = 2 * Math.PI / numbers.length;
-  let finalAngle = (2 * Math.PI - ballAngle + startAngle) % (2 * Math.PI);
-  let index = Math.floor(finalAngle / sliceAngle) % numbers.length;
-  let numeroGanador = numbers[index];
-
-  let elegido = parseInt(document.getElementById('numero').value);
-  let mensaje = "";
-
-  if (elegido === numeroGanador) {
-    mensaje = "¡Enhorabuena, acertaste!No hay Calada pal Lapa";
-  } else if (colors[elegido] === colors[numeroGanador]) {
-    mensaje = "¡ROJOS NO! Una calada pal Lapa ";
-  } else {
-    mensaje = "Has fallado, no hay postre APALEADO";
+  function elegirOtro(exclude) {
+    let opciones = numbers.filter(n => n !== exclude);
+    return opciones[Math.floor(Math.random() * opciones.length)];
   }
 
-  document.getElementById('resultado').textContent = "Número ganador: " + numeroGanador + " - " + mensaje;
-}
+  function mostrarResultado() {
+    let elegido = parseInt(document.getElementById('numero').value);
+    let ganador = numbers[chosenIndex];
 
-// Inicializar ruleta
-drawRoulette();
+    let mensaje = "";
+    if (elegido === ganador) {
+      mensaje = "¡Enhorabuena, acertaste! No hay Calada pal Lapa";
+    } else if (colors[elegido] === colors[ganador]) {
+      mensaje = "¡ROJOS NO! Una calada pal Lapa";
+    } else {
+      mensaje = "Has fallado, no hay postre APALEADO";
+    }
+
+    document.getElementById('resultado').textContent =
+      "Número ganador: " + ganador + " - " + mensaje;
+  }
+
+  drawRoulette(0); // inicial
 </script>
+
+</body>
+
   </div>
   <footer style="background-color: #111; color: white; text-align: center; padding: 20px; position: relative; bottom: 0; width: 100%;">
-  <p>&copy; 2025 CARTEL CARCARIANO. POSTRE POSTRE POSTRE 🥳🥳🥳 .</p>
+  <p>&copy; 2025 CARTEL CARCARIANO. POSTRE POSTRE POSTRE 🥳🥳 .</p>
 </footer>
-
