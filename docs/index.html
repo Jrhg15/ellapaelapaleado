@@ -7,7 +7,23 @@
   <title> El Lapa El Apaleado</title>
   <style>
 
-    
+    body {
+ cursor: none; /* Eliminar el cursor predeterminado */
+      font-family: Arial, sans-serif
+  }
+.cursor-lapa {
+      position: fixed;
+      top: 0;
+      left: 0;
+      font-size: 24px;
+      color: #ff4747; /* Color del texto "Lapa" */
+      font-weight: bold;
+      pointer-events: none; /* Evitar que el texto interfiera con la interacción */
+      z-index: 9999; /* Asegurarse de que el texto esté por encima de todo */
+      user-select: none; /* Evitar selección de texto */
+      transition: transform 0.1s ease; /* Animación suave para el movimiento */
+    }
+
     .centro {
   background-color: #f0f0f0; /* gris muy claro */
   color: #111; 
@@ -168,6 +184,19 @@
 
 <body>
 
+<div class="cursor-lapa">Lapa</div>
+
+  <script>
+    // Seleccionar el elemento que tiene la clase "cursor-lapa"
+    const cursor = document.querySelector('.cursor-lapa');
+
+    // Escuchar el movimiento del ratón
+    document.addEventListener('mousemove', function(e) {
+      // Posicionar el texto "Lapa" en las coordenadas del ratón
+      cursor.style.left = e.pageX + 'px';
+      cursor.style.top = e.pageY + 'px';
+    });
+  </script>
 
   <!-- Letras flotantes de fondo -->
   <div class="bg-text">SAMUEL LAPA • EL APALEADO • VBSE • BIGFOOT • HITLY • EL APALEADO • BUBU MALO • PARKING FOCONA • GEMA ME HACIAS • HABIBI LOPEZ</div>
