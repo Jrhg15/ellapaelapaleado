@@ -758,10 +758,7 @@
     </script>
 
 <h1>RULETA LAPARIANA</h1>
-<!-- CONTENEDOR DE LA RULETA -->
-<div style="text-align:center; margin-top:50px;">
-<head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RULETA LAPARIANA</title>
     <style>
@@ -770,15 +767,15 @@
             text-align: center;
             font-family: Arial, sans-serif;
             margin-top: 30px;
-            background-color: #333;
+            background-color: #222; /* Fondo oscuro */
         }
         canvas {
             background-color: #0f0f0f;
-            border: 2px solid #ff4747;
+            border: 5px solid #ff4747;
             border-radius: 50%;
         }
         button {
-            margin-left: 20px;
+            margin-top: 20px;
             padding: 10px;
             background: #ff4747;
             border: none;
@@ -800,7 +797,6 @@
 <body>
 
 <h1>RULETA LAPARIANA</h1>
-<!-- CONTENEDOR DE LA RULETA -->
 <div style="text-align:center; margin-top:50px;">
     <canvas id="canvas-ruleta" width="500" height="500"></canvas>
 
@@ -860,7 +856,7 @@
   let audio = null;
 
   function drawRoulette(currentAngle) {
-    ctx.clearRect(0, 0, width, height);
+    ctx.clearRect(0, 0, width, height); // Limpia el canvas para actualizar la ruleta
     const sliceAngle = 2 * Math.PI / numbers.length;
 
     // Dibujar la ruleta
@@ -870,7 +866,7 @@
       ctx.moveTo(centerX, centerY);
       ctx.arc(centerX, centerY, radius, angle, angle + sliceAngle);
       ctx.closePath();
-      ctx.fillStyle = colors[numbers[i]]; 
+      ctx.fillStyle = colors[numbers[i]];
       ctx.fill();
       ctx.strokeStyle = '#fff';
       ctx.stroke();
@@ -886,7 +882,6 @@
     }
 
     // Dibujar la bola
-    const sliceAngle = 2 * Math.PI / numbers.length;
     const ballAngle = currentAngle + (chosenIndex * sliceAngle + sliceAngle / 2);
     const ballX = centerX + (radius - 30) * Math.cos(ballAngle);
     const ballY = centerY + (radius - 30) * Math.sin(ballAngle);
@@ -967,7 +962,6 @@
 
   drawRoulette(0); // Dibujar la ruleta inicial
 </script>
-
 </body>
 
   </div>
