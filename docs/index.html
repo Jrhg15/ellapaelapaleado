@@ -844,6 +844,9 @@
     12: 'red', 35: 'black', 3: 'red', 26: 'black'
   };
 
+  let ballAngle = 0;
+  let ballSpeed = 0;
+  let ballFriction = 0.985;
   let startAngle = 0;
   let spinning = false;
   let spinFrames = 0;
@@ -884,6 +887,14 @@
     ctx.fill();
   }
 
+  function tirarRuleta() {
+    ballSpeed = 0.3 + Math.random() * 0.1; // velocidad inicial aleatoria
+    if (spinning) return;
+    const audio = new Audio("https://dn721703.ca.archive.org/0/items/el-lapa-apaleao/%23%23%23%20_El%20Lapa%20Apaleao%27_%20.mp3");
+    audio.loop = true;
+  audio.currentTime = 9; // ⏱️ Comienza desde el segundo 9
+  audio.play();
+
   function animate() {
     if (spinning) {
       const t = spinFrames / maxFrames;
@@ -900,6 +911,11 @@
 
       if (spinFrames <= maxFrames) {
         requestAnimationFrame(animate);
+        if (ballSpeed < 0.002) {
+  const sliceAngle = 2 * Math.PI / numbers.length;
+  const targetAngle = chosenIndex * sliceAngle + sliceAngle / 2;
+  ballAngle = targetAngle;
+}
       } else {
         spinning = false;
         mostrarResultado();
@@ -907,12 +923,7 @@
     }
   }
 
-  function tirarRuleta() {
-    if (spinning) return;
-    const audio = new Audio("https://dn721703.ca.archive.org/0/items/el-lapa-apaleao/%23%23%23%20_El%20Lapa%20Apaleao%27_%20.mp3");
-    audio.loop = true;
-  audio.currentTime = 9; // ⏱️ Comienza desde el segundo 9
-  audio.play();
+  
  
 
 
