@@ -831,35 +831,34 @@
   const radius = 230;
 
   const numbers = [
-    0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,
-    14,31,9,22,18,29,7,28,12,35,3,26
+    0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23,
+    10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26
   ];
 
   const colors = {
     0: 'green',
-    32: 'red', 15: 'black', 19: 'red', 4: 'black', 21: 'red', 2: 'black', 25: 'red', 17: 'black',
-    34: 'red', 6: 'black', 27: 'red', 13: 'black', 36: 'red', 11: 'black', 30: 'red', 8: 'black',
-    23: 'red', 10: 'black', 5: 'red', 24: 'black', 16: 'red', 33: 'black', 1: 'red', 20: 'black',
-    14: 'red', 31: 'black', 9: 'red', 22: 'black', 18: 'red', 29: 'black', 7: 'red', 28: 'black',
-    12: 'red', 35: 'black', 3: 'red', 26: 'black'
+    32: 'red', 15: 'black', 19: 'red', 4: 'black', 21: 'red', 2: 'black',
+    25: 'red', 17: 'black', 34: 'red', 6: 'black', 27: 'red', 13: 'black',
+    36: 'red', 11: 'black', 30: 'red', 8: 'black', 23: 'red', 10: 'black',
+    5: 'red', 24: 'black', 16: 'red', 33: 'black', 1: 'red', 20: 'black',
+    14: 'red', 31: 'black', 9: 'red', 22: 'black', 18: 'red', 29: 'black',
+    7: 'red', 28: 'black', 12: 'red', 35: 'black', 3: 'red', 26: 'black'
   };
 
-  let ballAngle = 0;
-  let ballSpeed = 0;
-  let ballFriction = 0.985;
-  let startAngle = 0;
   let spinning = false;
-  let spinFrames = 0;
-  let maxFrames = 540; // más duración
-  let finalBallAngle = 0;
+  let startTime = null;
+  let duration = 5000; // ms
+  let startAngle = 0;
+  let endAngle = 0;
   let chosenIndex = 0;
+  let audio = null;
 
-  function drawRoulette(ballAngle) {
+  function drawRoulette(currentAngle) {
     ctx.clearRect(0, 0, width, height);
     const sliceAngle = 2 * Math.PI / numbers.length;
 
     for (let i = 0; i < numbers.length; i++) {
-      const angle = startAngle + i * sliceAngle;
+      const angle = currentAngle + i * sliceAngle;
       ctx.beginPath();
       ctx.moveTo(centerX, centerY);
       ctx.arc(centerX, centerY, radius, angle, angle + sliceAngle);
@@ -879,8 +878,12 @@
       ctx.restore();
     }
 
+    // Draw the ball
+    const sliceAngle = 2 * Math.PI / numbers.length;
+    const ballAngle = currentAngle + chosenIndex * sliceAngle + sliceAngle / 2;
     const ballX = centerX + (radius - 30) * Math.cos(ballAngle);
     const ballY = centerY + (radius - 30) * Math.sin(ballAngle);
+
     ctx.beginPath();
     ctx.arc(ballX, ballY, 8, 0, 2 * Math.PI);
     ctx.fillStyle = "white";
@@ -888,53 +891,72 @@
   }
 
   function tirarRuleta() {
-  ballSpeed = 0.3 + Math.random() * 0.1; // velocidad inicial aleatoria
-  if (spinning) return;
-  const audio = new Audio("https://dn721703.ca.archive.org/0/items/el-lapa-apaleao/%23%23%23%20_El%20Lapa%20Apaleao%27_%20.mp3");
-  audio.loop = true;
-  audio.currentTime = 9;
-  audio.play();
+    if (spinning) return;
+    spinning = true;
 
-  let elegido = parseInt(document.getElementById('numero').value);
-  let ganador = Math.random() < 0.3 ? elegido : elegirOtro(elegido);
-  chosenIndex = numbers.indexOf(ganador);
+    audio = new Audio("https://dn721703.ca.archive.org/0/items/el-lapa-apaleao/%23%23%23%20_El%20Lapa%20Apaleao%27_%20.mp3");
+    audio.currentTime = 9;
+    audio.loop = true;
+    audio.play();
 
-  spinFrames = 0;
-  startAngle = 0;
-  spinning = true;
-  animate();
-  window._laparianoAudio = audio;
-}
+    const elegido = parseInt(document.getElementById('numero').value);
+    const ganador = Math.random() < 0.3 ? elegido : elegirOtro(elegido);
+    chosenIndex = numbers.indexOf(ganador);
 
-function elegirOtro(exclude) {
-  let opciones = numbers.filter(n => n !== exclude);
-  return opciones[Math.floor(Math.random() * opciones.length)];
-}
-
-function mostrarResultado() {
-  if (window._laparianoAudio) {
-    window._laparianoAudio.pause();
-    window._laparianoAudio.currentTime = 0;
-  }
-  let elegido = parseInt(document.getElementById('numero').value);
-  let ganador = numbers[chosenIndex];
-
-  let mensaje = "";
-  if (elegido === ganador) {
-    mensaje = "¡Enhorabuena, acertaste! No hay Calada pal Lapa";
-  } else if (colors[elegido] === colors[ganador]) {
-    mensaje = "¡ROJOS NO! Una calada pal Lapa";
-  } else {
-    mensaje = "Has fallado, no hay postre APALEADO";
+    const vueltas = 6; // vueltas completas
+    const sliceAngle = 2 * Math.PI / numbers.length;
+    endAngle = vueltas * 2 * Math.PI + chosenIndex * sliceAngle + sliceAngle / 2;
+    startAngle = 0;
+    startTime = null;
+    requestAnimationFrame(animate);
   }
 
-  document.getElementById('resultado').textContent =
-    "Número ganador: " + ganador + " - " + mensaje;
-}
+  function animate(timestamp) {
+    if (!startTime) startTime = timestamp;
+    const elapsed = timestamp - startTime;
 
+    if (elapsed < duration) {
+      const t = elapsed / duration;
+      const ease = 1 - Math.pow(1 - t, 3); // ease-out
+      const currentAngle = startAngle + (endAngle - startAngle) * ease;
+      drawRoulette(currentAngle);
+      requestAnimationFrame(animate);
+    } else {
+      drawRoulette(endAngle);
+      spinning = false;
+      mostrarResultado();
+    }
+  }
 
-  drawRoulette(0); // inicial
+  function elegirOtro(exclude) {
+    return numbers.filter(n => n !== exclude)[Math.floor(Math.random() * (numbers.length - 1))];
+  }
+
+  function mostrarResultado() {
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+
+    const elegido = parseInt(document.getElementById('numero').value);
+    const ganador = numbers[chosenIndex];
+    let mensaje = "";
+
+    if (elegido === ganador) {
+      mensaje = "¡Enhorabuena, acertaste! No hay Calada pal Lapa";
+    } else if (colors[elegido] === colors[ganador]) {
+      mensaje = "¡ROJOS NO! Una calada pal Lapa";
+    } else {
+      mensaje = "Has fallado, no hay postre APALEADO";
+    }
+
+    document.getElementById('resultado').textContent =
+      "Número ganador: " + ganador + " - " + mensaje;
+  }
+
+  drawRoulette(0); // draw initial state
 </script>
+
 
 </body>
 
