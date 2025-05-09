@@ -757,7 +757,7 @@
         });
     </script>
 
- <h1>RULETA LAPARIANA</h1>
+<h1>RULETA LAPARIANA</h1>
 <!-- CONTENEDOR DE LA RULETA -->
 <div style="text-align:center; margin-top:50px;">
 <head>
@@ -886,7 +886,8 @@
     }
 
     // Dibujar la bola
-    const ballAngle = currentAngle + chosenIndex * sliceAngle + sliceAngle / 2;
+    const sliceAngle = 2 * Math.PI / numbers.length;
+    const ballAngle = currentAngle + (chosenIndex * sliceAngle + sliceAngle / 2);
     const ballX = centerX + (radius - 30) * Math.cos(ballAngle);
     const ballY = centerY + (radius - 30) * Math.sin(ballAngle);
 
