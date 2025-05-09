@@ -757,7 +757,7 @@
         });
     </script>
 
-  <h1>RULETA LAPARIANA</h1>
+ <h1>RULETA LAPARIANA</h1>
 <!-- CONTENEDOR DE LA RULETA -->
 <div style="text-align:center; margin-top:50px;">
 <head>
@@ -870,7 +870,7 @@
       ctx.moveTo(centerX, centerY);
       ctx.arc(centerX, centerY, radius, angle, angle + sliceAngle);
       ctx.closePath();
-      ctx.fillStyle = colors[numbers[i]];
+      ctx.fillStyle = colors[numbers[i]]; 
       ctx.fill();
       ctx.strokeStyle = '#fff';
       ctx.stroke();
@@ -913,7 +913,7 @@
     const vueltas = 6;
     const sliceAngle = 2 * Math.PI / numbers.length;
     endAngle = vueltas * 2 * Math.PI + chosenIndex * sliceAngle + sliceAngle / 2;
-    startAngle = 0;
+    startAngle = 0; // Empezamos desde 0
     startTime = null;
 
     // Comenzar la animación
