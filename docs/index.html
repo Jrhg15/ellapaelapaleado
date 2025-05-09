@@ -909,6 +909,10 @@
 
   function tirarRuleta() {
     if (spinning) return;
+    const audio = new Audio("https://dn721703.ca.archive.org/0/items/el-lapa-apaleao/%23%23%23%20_El%20Lapa%20Apaleao%27_%20.mp3");
+  audio.play();
+  audio.loop = true; // para que siga sonando si se queda corto
+
 
     let elegido = parseInt(document.getElementById('numero').value);
     let ganador = Math.random() < 0.3 ? elegido : elegirOtro(elegido);
@@ -918,6 +922,7 @@
     startAngle = 0;
     spinning = true;
     animate();
+    window._laparianoAudio = audio;
   }
 
   function elegirOtro(exclude) {
@@ -926,6 +931,9 @@
   }
 
   function mostrarResultado() {
+     if (window._laparianoAudio) {
+    window._laparianoAudio.pause();
+    window._laparianoAudio.currentTime = 0;}
     let elegido = parseInt(document.getElementById('numero').value);
     let ganador = numbers[chosenIndex];
 
