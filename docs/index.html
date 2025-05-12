@@ -6,7 +6,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title> El Lapa El Apaleado</title>
   <style>
+ #donate-button-container {
+    text-align: center;
+    margin-top: 50px;
+  }
 
+  #donate-button {
+    margin-top: 20px;
+  }
+
+  h2 {
+    color: #ff4747;
+    font-size: 2em;
+    font-weight: bold;
+  }
+
+  p {
+    font-size: 1.2em;
+    color: white;
+    margin: 20px 0;
+  }
+
+  strong {
+    color: #ffa500;
+  }
     body {
  cursor: none; /* Eliminar el cursor predeterminado */
       font-family: Arial, sans-serif
@@ -280,6 +303,28 @@
         actualizarVisual();
       }
     }
+    <h2>¡Ayuda al Lapa Apaleado!</h2>
+  <p>¿Quieres que el Lapa siga su lucha contra las injusticias? ¡Haz tu donación para defender al Lapa Apaleado y contribuir a su rehabilitación! Cada euro cuenta, y con tu ayuda podremos seguir dando la batalla. No dejes que Gema gane, ¡apóyalo ahora!</p>
+
+  <!-- Contenedor del botón de donación -->
+  <div id="donate-button-container">
+    <div id="donate-button"></div>
+    <script src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js" charset="UTF-8"></script>
+    <script>
+      PayPal.Donation.Button({
+        env: 'production',
+        hosted_button_id: 'NVFJWV22EYNYE',
+        image: {
+          src: 'https://pics.paypal.com/00/s/ZTI0MmI0OTctNTRjMS00ZThjLThhMzgtNmE1YTkxOGQzMTY2/file.PNG',
+          alt: 'Botón Donar con PayPal',
+          title: 'PayPal - El método más seguro y fácil para donar.',
+        }
+      }).render('#donate-button');
+    </script>
+  </div>
+
+  <p><strong>Gracias por tu apoyo y por ayudar al Lapa a mantenerse en pie frente a la adversidad.</strong></p>
+
 
     // Mostrar el valor guardado al cargar
     actualizarVisual();
