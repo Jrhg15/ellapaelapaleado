@@ -267,50 +267,62 @@
     <iframe id="video-iframe" src="https://www.youtube.com/embed/Kts_f8Oljgw" allow="autoplay; encrypted-media" allowfullscreen></iframe>
   </div>
 
-  <!-- Contador de donaciones -->
-  <div class="contador" onclick="aumentarContador()" style="cursor: pointer;">
-    <span id="contador">0</span>€ para la virginidad del VBSE
-  </div>
-  
-  <button onclick="aumentarContador()">Donar 1€ al VBSE</button>
+<!-- Contador de donaciones -->
+<div class="contador" onclick="aumentarContador()" style="cursor: pointer;">
+  <span id="contador">0</span>€ para la virginidad del VBSE
+</div>
 
+<button onclick="aumentarContador()">Donar 1€ al VBSE</button>
 
-  <!-- Audio de celebración -->
-  <audio id="audio-celebracion" src="https://dn721507.ca.archive.org/0/items/audio-2025-05-05-07-53-27/AUDIO-2025-05-05-07-53-27.m4a" preload="auto"></audio>
+<!-- Audio de celebración -->
+<audio id="audio-celebracion" src="https://dn721507.ca.archive.org/0/items/audio-2025-05-05-07-53-27/AUDIO-2025-05-05-07-53-27.m4a" preload="auto"></audio>
 
-  <script>
-    const LIMITE = 60;
-    let contador = parseInt(localStorage.getItem('contador')) || 0;
+<script>
+  const LIMITE = 60;
+  let contador = parseInt(localStorage.getItem('contador')) || 0;
 
-    function actualizarVisual() {
-      document.getElementById('contador').textContent = contador;
-    }
+  function actualizarVisual() {
+    document.getElementById('contador').textContent = contador;
+  }
 
-    function aumentarContador() {
-      contador++;
+  function aumentarContador() {
+    contador++;
 
-      if (contador >= LIMITE) {
-        alert("¡Hoy Al Querubín le pagan el postre!");
-        document.querySelector('.contador').innerHTML = "🎉 ¡Al Querubín le pagan el postre! 🎉";
-        // Reproducir audio de celebración
-        const audio = document.getElementById('audio-celebracion');
-        audio.play();
+    if (contador >= LIMITE) {
+      alert("¡Hoy Al Querubín le pagan el postre!");
 
-        setTimeout(() => {
-          contador = 0;
-          localStorage.setItem('contador', contador);
-          document.querySelector('.contador').innerHTML = '<span id="contador">0</span>';
-        }, 1500);
-      } else {
+      const contadorDiv = document.querySelector('.contador');
+      contadorDiv.innerHTML = '🎉 ¡Al Querubín le pagan el postre! 🎉';
+
+      // Reproducir audio de celebración
+      const audio = document.getElementById('audio-celebracion');
+      audio.play();
+
+      setTimeout(() => {
+        contador = 0;
         localStorage.setItem('contador', contador);
-        actualizarVisual();
-      }
-    }
-  // Mostrar valor al cargar la página
-document.addEventListener('DOMContentLoaded', actualizarVisual);
 
- 
-  </script>
+        // Restaurar el contenido con onclick y el contador visible
+        contadorDiv.innerHTML = `
+          <span id="contador">0</span>€ para la virginidad del VBSE
+        `;
+
+        // Volver a poner el handler y el estilo
+        contadorDiv.onclick = aumentarContador;
+        contadorDiv.style.cursor = 'pointer';
+
+      }, 1500);
+
+    } else {
+      localStorage.setItem('contador', contador);
+      actualizarVisual();
+    }
+  }
+
+  // Mostrar valor al cargar la página
+  document.addEventListener('DOMContentLoaded', actualizarVisual);
+</script>
+
 <button onclick="window.open('https://jrhg15.github.io/mehaciaslapa/index.html', '_blank')">
  Pulsa este botón para conocer más sobre la historia de Samuel El Lapa y Gema me hacías
 </button>
