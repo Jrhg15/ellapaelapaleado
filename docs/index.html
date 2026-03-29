@@ -860,112 +860,147 @@
   let chosenIndex = 0;
   let audio = null;
 
-  function drawRoulette(currentAngle) {
-    ctx.clearRect(0, 0, width, height); // Limpia el canvas para actualizar la ruleta
-    const sliceAngle = 2 * Math.PI / numbers.length;
+   // --- NUEVA LÓGICA RULETA LAPARIANA (BOLA INDEPENDIENTE) ---
+    const canvas = document.getElementById('canvas-ruleta');
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width;
+    const height = canvas.height;
+    const centerX = width / 2;
+    const centerY = height / 2;
+    const radius = 230;
 
-    // Dibujar la ruleta
-    for (let i = 0; i < numbers.length; i++) {
-      const angle = currentAngle + i * sliceAngle;
-      ctx.beginPath();
-      ctx.moveTo(centerX, centerY);
-      ctx.arc(centerX, centerY, radius, angle, angle + sliceAngle);
-      ctx.closePath();
-      ctx.fillStyle = colors[numbers[i]];
-      ctx.fill();
-      ctx.strokeStyle = '#fff';
-      ctx.stroke();
+    const numbers = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
+    const colors = {
+      0: 'green', 32: 'red', 15: 'black', 19: 'red', 4: 'black', 21: 'red', 2: 'black', 25: 'red', 17: 'black', 34: 'red', 6: 'black', 27: 'red', 13: 'black',
+      36: 'red', 11: 'black', 30: 'red', 8: 'black', 23: 'red', 10: 'black', 5: 'red', 24: 'black', 16: 'red', 33: 'black', 1: 'red', 20: 'black', 14: 'red', 
+      31: 'black', 9: 'red', 22: 'black', 18: 'red', 29: 'black', 7: 'red', 28: 'black', 12: 'red', 35: 'black', 3: 'red', 26: 'black'
+    };
 
+    let spinning = false;
+    let startTime = null;
+    let duration = 5000; 
+    let startAngle = 0;
+    let endAngle = 0;
+    let chosenIndex = 0;
+    let audioRuleta = null;
+    let ballRotation = 0; // ROTACIÓN INDEPENDIENTE DE LA BOLA
+
+    function drawRoulette(currentAngle) {
+      ctx.clearRect(0, 0, width, height);
+      const sliceAngle = 2 * Math.PI / numbers.length;
+
+      // 1. Dibujar el disco (la ruleta)
       ctx.save();
       ctx.translate(centerX, centerY);
-      ctx.rotate(angle + sliceAngle / 2);
-      ctx.textAlign = "right";
-      ctx.fillStyle = "white";
-      ctx.font = "bold 18px Arial";
-      ctx.fillText(numbers[i], radius - 10, 10);
+      ctx.rotate(currentAngle);
+      for (let i = 0; i < numbers.length; i++) {
+        const angle = i * sliceAngle;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.arc(0, 0, radius, angle, angle + sliceAngle);
+        ctx.fillStyle = colors[numbers[i]];
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+        ctx.stroke();
+
+        ctx.save();
+        ctx.rotate(angle + sliceAngle / 2);
+        ctx.textAlign = "right";
+        ctx.fillStyle = "white";
+        ctx.font = "bold 16px Arial";
+        ctx.fillText(numbers[i], radius - 15, 6);
+        ctx.restore();
+      }
       ctx.restore();
+
+      // 2. Dibujar la bola (con su propia rotación)
+      const finalBallAngle = ballRotation; 
+      const ballX = centerX + (radius - 35) * Math.cos(finalBallAngle);
+      const ballY = centerY + (radius - 35) * Math.sin(finalBallAngle);
+
+      ctx.beginPath();
+      ctx.arc(ballX, ballY, 9, 0, 2 * Math.PI);
+      ctx.fillStyle = "white";
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = "white";
+      ctx.fill();
+      ctx.shadowBlur = 0; 
     }
 
-    // Dibujar la bola
-    const ballAngle = currentAngle + (chosenIndex * sliceAngle + sliceAngle / 2);
-    const ballX = centerX + (radius - 30) * Math.cos(ballAngle);
-    const ballY = centerY + (radius - 30) * Math.sin(ballAngle);
+    function tirarRuleta() {
+      if (spinning) return;
+      spinning = true;
 
-    ctx.beginPath();
-    ctx.arc(ballX, ballY, 8, 0, 2 * Math.PI);
-    ctx.fillStyle = "white";
-    ctx.fill();
-  }
+      audioRuleta = new Audio("https://dn721703.ca.archive.org/0/items/el-lapa-apaleao/%23%23%23%20_El%20Lapa%20Apaleao%27_%20.mp3");
+      audioRuleta.currentTime = 9;
+      audioRuleta.loop = true;
+      audioRuleta.play().catch(e=>console.log("Audio block"));
 
-  function tirarRuleta() {
-    if (spinning) return; // No girar si ya está girando
-    spinning = true;
+      const elegido = parseInt(document.getElementById('numero').value);
+      const ganador = Math.random() < 0.3 ? elegido : elegirOtro(elegido);
+      chosenIndex = numbers.indexOf(ganador);
 
-    audio = new Audio("https://dn721703.ca.archive.org/0/items/el-lapa-apaleao/%23%23%23%20_El%20Lapa%20Apaleao%27_%20.mp3");
-    audio.currentTime = 9;
-    audio.loop = true;
-    audio.play();
+      const vueltas = 5;
+      const sliceAngle = 2 * Math.PI / numbers.length;
+      endAngle = vueltas * 2 * Math.PI; // Solo marcamos las vueltas del disco
+      startAngle = 0; 
+      startTime = null;
 
-    const elegido = parseInt(document.getElementById('numero').value);
-    const ganador = Math.random() < 0.3 ? elegido : elegirOtro(elegido);
-    chosenIndex = numbers.indexOf(ganador);
-
-    // Definir los ángulos para la animación
-    const vueltas = 6;
-    const sliceAngle = 2 * Math.PI / numbers.length;
-    endAngle = vueltas * 2 * Math.PI + chosenIndex * sliceAngle + sliceAngle / 2;
-    startAngle = 0; // Empezamos desde 0
-    startTime = null;
-
-    // Comenzar la animación
-    requestAnimationFrame(animate);
-  }
-
-  function animate(timestamp) {
-    if (!startTime) startTime = timestamp; // Iniciar el tiempo
-    const elapsed = timestamp - startTime;
-
-    // Animación
-    if (elapsed < duration) {
-      const t = elapsed / duration;
-      const ease = 1 - Math.pow(1 - t, 3); // Efecto de desaceleración
-      const currentAngle = startAngle + (endAngle - startAngle) * ease;
-      drawRoulette(currentAngle);
       requestAnimationFrame(animate);
-    } else {
-      drawRoulette(endAngle); // Dibujar el ángulo final
-      spinning = false; // Detener la animación
-      mostrarResultado();
-    }
-  }
-
-  function elegirOtro(exclude) {
-    return numbers.filter(n => n !== exclude)[Math.floor(Math.random() * (numbers.length - 1))];
-  }
-
-  function mostrarResultado() {
-    if (audio) {
-      audio.pause();
-      audio.currentTime = 0;
     }
 
-    const elegido = parseInt(document.getElementById('numero').value);
-    const ganador = numbers[chosenIndex];
-    let mensaje = "";
+    function animate(timestamp) {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      const t = elapsed / duration;
 
-    if (elegido === ganador) {
-      mensaje = "¡Enhorabuena, acertaste! No hay Calada pal Lapa";
-    } else if (colors[elegido] === colors[ganador]) {
-      mensaje = "¡ROJOS NO! Una calada pal Lapa";
-    } else {
-      mensaje = "Has fallado, no hay postre APALEADO";
+      if (t < 1) {
+        const easeOut = 1 - Math.pow(1 - t, 3);
+        const currentAngle = startAngle + (endAngle - startAngle) * easeOut;
+        
+        // La bola gira más rápido al principio y frena
+        ballRotation = (t * -40) + (chosenIndex * (2 * Math.PI / numbers.length));
+        
+        drawRoulette(currentAngle);
+        requestAnimationFrame(animate);
+      } else {
+        // Posición final exacta
+        const sliceAngle = 2 * Math.PI / numbers.length;
+        const finalDiscAngle = endAngle;
+        ballRotation = finalDiscAngle + (chosenIndex * sliceAngle) + sliceAngle / 2;
+        
+        drawRoulette(finalDiscAngle);
+        spinning = false;
+        mostrarResultado();
+      }
     }
 
-    document.getElementById('resultado').textContent =
-      "Número ganador: " + ganador + " - " + mensaje;
-  }
+    function elegirOtro(exclude) {
+      return numbers.filter(n => n !== exclude)[Math.floor(Math.random() * (numbers.length - 1))];
+    }
 
-  drawRoulette(0); // Dibujar la ruleta inicial
+    function mostrarResultado() {
+      if (audioRuleta) {
+        audioRuleta.pause();
+        audioRuleta.currentTime = 0;
+      }
+      const elegido = parseInt(document.getElementById('numero').value);
+      const ganador = numbers[chosenIndex];
+      let mensaje = "";
+
+      if (elegido === ganador) {
+        mensaje = "¡Enhorabuena, acertaste! No hay Calada pal Lapa";
+      } else if (colors[elegido] === colors[ganador]) {
+        mensaje = "¡ROJOS NO! Una calada pal Lapa";
+      } else {
+        mensaje = "Has fallado, no hay postre APALEADO";
+      }
+
+      document.getElementById('resultado').textContent = "Número ganador: " + ganador + " - " + mensaje;
+    }
+
+    // Dibujar ruleta inicial
+    drawRoulette(0);
 </script>
 </body>
 
