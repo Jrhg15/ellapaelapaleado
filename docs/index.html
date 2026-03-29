@@ -806,8 +806,13 @@
     <canvas id="canvas-ruleta" width="500" height="500"></canvas>
 
     <div style="margin-top:20px;">
-        <label for="numero">Elige tu número:</label>
-        <select id="numero">
+       <div style="text-align:center; margin: 50px auto;">
+    <h1 style="color:white; font-family: Arial, sans-serif;">RULETA LAPARIANA</h1>
+    <canvas id="canvas-ruleta" width="500" height="500"></canvas>
+    
+    <div style="margin-top:20px;">
+        <label for="numero-ruleta" style="color:white;">Elige tu número:</label>
+        <select id="numero-ruleta">
             <option value="0">0</option><option value="32">32</option><option value="15">15</option>
             <option value="19">19</option><option value="4">4</option><option value="21">21</option>
             <option value="2">2</option><option value="25">25</option><option value="17">17</option>
@@ -822,185 +827,115 @@
             <option value="12">12</option><option value="35">35</option><option value="3">3</option>
             <option value="26">26</option>
         </select>
-        <button onclick="tirarRuleta()">¡TIRAR!</button>
+        <button onclick="tirarRuleta()" style="background:#ff4747; color:white; padding:10px; border:none; cursor:pointer;">¡TIRAR!</button>
+    </div>
+    <p id="resultado-ruleta" style="margin-top:20px; font-size:1.5em; color:#ffa500; font-weight:bold;"></p>
+</div>
     </div>
 
     <p id="resultado"></p>
 </div>
-
 <script>
-  const canvas = document.getElementById('canvas-ruleta');
-  const ctx = canvas.getContext('2d');
-  const width = canvas.width;
-  const height = canvas.height;
-  const centerX = width / 2;
-  const centerY = height / 2;
-  const radius = 230;
+    // Configuración Base
+    const canvasR = document.getElementById('canvas-ruleta');
+    const ctxR = canvasR.getContext('2d');
+    const widthR = canvasR.width;
+    const heightR = canvasR.height;
+    const centerR = widthR / 2;
+    const radiusR = 230;
 
-  const numbers = [
-    0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23,
-    10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26
-  ];
+    const numsR = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
+    const colorsR = { 0: 'green', 32: 'red', 15: 'black', 19: 'red', 4: 'black', 21: 'red', 2: 'black', 25: 'red', 17: 'black', 34: 'red', 6: 'black', 27: 'red', 13: 'black', 36: 'red', 11: 'black', 30: 'red', 8: 'black', 23: 'red', 10: 'black', 5: 'red', 24: 'black', 16: 'red', 33: 'black', 1: 'red', 20: 'black', 14: 'red', 31: 'black', 9: 'red', 22: 'black', 18: 'red', 29: 'black', 7: 'red', 28: 'black', 12: 'red', 35: 'black', 3: 'red', 26: 'black' };
 
-  const colors = {
-    0: 'green',
-    32: 'red', 15: 'black', 19: 'red', 4: 'black', 21: 'red', 2: 'black',
-    25: 'red', 17: 'black', 34: 'red', 6: 'black', 27: 'red', 13: 'black',
-    36: 'red', 11: 'black', 30: 'red', 8: 'black', 23: 'red', 10: 'black',
-    5: 'red', 24: 'black', 16: 'red', 33: 'black', 1: 'red', 20: 'black',
-    14: 'red', 31: 'black', 9: 'red', 22: 'black', 18: 'red', 29: 'black',
-    7: 'red', 28: 'black', 12: 'red', 35: 'black', 3: 'red', 26: 'black'
-  };
+    let isSpinningR = false;
+    let ballRotationR = 0;
+    let audioR = null;
 
-  let spinning = false;
-  let startTime = null;
-  let duration = 5000; // ms
-  let startAngle = 0;
-  let endAngle = 0;
-  let chosenIndex = 0;
-  let audio = null;
+    function drawRouletteR(currentAngle) {
+        ctxR.clearRect(0, 0, widthR, heightR);
+        const sliceAngle = 2 * Math.PI / numsR.length;
 
-   // --- NUEVA LÓGICA RULETA LAPARIANA (BOLA INDEPENDIENTE) ---
-    const canvas = document.getElementById('canvas-ruleta');
-    const ctx = canvas.getContext('2d');
-    const width = canvas.width;
-    const height = canvas.height;
-    const centerX = width / 2;
-    const centerY = height / 2;
-    const radius = 230;
+        // 1. Dibujar el Disco
+        ctxR.save();
+        ctxR.translate(centerR, centerR);
+        ctxR.rotate(currentAngle);
+        for (let i = 0; i < numsR.length; i++) {
+            const angle = i * sliceAngle;
+            ctxR.beginPath();
+            ctxR.moveTo(0, 0);
+            ctxR.arc(0, 0, radiusR, angle, angle + sliceAngle);
+            ctxR.fillStyle = colorsR[numsR[i]];
+            ctxR.fill();
+            ctxR.strokeStyle = 'rgba(255,255,255,0.2)';
+            ctxR.stroke();
 
-    const numbers = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
-    const colors = {
-      0: 'green', 32: 'red', 15: 'black', 19: 'red', 4: 'black', 21: 'red', 2: 'black', 25: 'red', 17: 'black', 34: 'red', 6: 'black', 27: 'red', 13: 'black',
-      36: 'red', 11: 'black', 30: 'red', 8: 'black', 23: 'red', 10: 'black', 5: 'red', 24: 'black', 16: 'red', 33: 'black', 1: 'red', 20: 'black', 14: 'red', 
-      31: 'black', 9: 'red', 22: 'black', 18: 'red', 29: 'black', 7: 'red', 28: 'black', 12: 'red', 35: 'black', 3: 'red', 26: 'black'
-    };
+            // Números
+            ctxR.save();
+            ctxR.rotate(angle + sliceAngle / 2);
+            ctxR.textAlign = "right";
+            ctxR.fillStyle = "white";
+            ctxR.font = "bold 16px Arial";
+            ctxR.fillText(numsR[i], radiusR - 15, 6);
+            ctxR.restore();
+        }
+        ctxR.restore();
 
-    let spinning = false;
-    let startTime = null;
-    let duration = 5000; 
-    let startAngle = 0;
-    let endAngle = 0;
-    let chosenIndex = 0;
-    let audioRuleta = null;
-    let ballRotation = 0; // ROTACIÓN INDEPENDIENTE DE LA BOLA
-
-    function drawRoulette(currentAngle) {
-      ctx.clearRect(0, 0, width, height);
-      const sliceAngle = 2 * Math.PI / numbers.length;
-
-      // 1. Dibujar el disco (la ruleta)
-      ctx.save();
-      ctx.translate(centerX, centerY);
-      ctx.rotate(currentAngle);
-      for (let i = 0; i < numbers.length; i++) {
-        const angle = i * sliceAngle;
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.arc(0, 0, radius, angle, angle + sliceAngle);
-        ctx.fillStyle = colors[numbers[i]];
-        ctx.fill();
-        ctx.strokeStyle = 'rgba(255,255,255,0.2)';
-        ctx.stroke();
-
-        ctx.save();
-        ctx.rotate(angle + sliceAngle / 2);
-        ctx.textAlign = "right";
-        ctx.fillStyle = "white";
-        ctx.font = "bold 16px Arial";
-        ctx.fillText(numbers[i], radius - 15, 6);
-        ctx.restore();
-      }
-      ctx.restore();
-
-      // 2. Dibujar la bola (con su propia rotación)
-      const finalBallAngle = ballRotation; 
-      const ballX = centerX + (radius - 35) * Math.cos(finalBallAngle);
-      const ballY = centerY + (radius - 35) * Math.sin(finalBallAngle);
-
-      ctx.beginPath();
-      ctx.arc(ballX, ballY, 9, 0, 2 * Math.PI);
-      ctx.fillStyle = "white";
-      ctx.shadowBlur = 10;
-      ctx.shadowColor = "white";
-      ctx.fill();
-      ctx.shadowBlur = 0; 
+        // 2. Dibujar la Bola
+        const bx = centerR + (radiusR - 35) * Math.cos(ballRotationR);
+        const by = centerR + (radiusR - 35) * Math.sin(ballRotationR);
+        ctxR.beginPath();
+        ctxR.arc(bx, by, 9, 0, 2 * Math.PI);
+        ctxR.fillStyle = "white";
+        ctxR.shadowBlur = 10;
+        ctxR.shadowColor = "white";
+        ctxR.fill();
+        ctxR.shadowBlur = 0;
     }
 
     function tirarRuleta() {
-      if (spinning) return;
-      spinning = true;
+        if (isSpinningR) return;
+        isSpinningR = true;
 
-      audioRuleta = new Audio("https://dn721703.ca.archive.org/0/items/el-lapa-apaleao/%23%23%23%20_El%20Lapa%20Apaleao%27_%20.mp3");
-      audioRuleta.currentTime = 9;
-      audioRuleta.loop = true;
-      audioRuleta.play().catch(e=>console.log("Audio block"));
+        // Audio del Lapa (El que tenías antes)
+        audioR = new Audio("https://dn721703.ca.archive.org/0/items/el-lapa-apaleao/%23%23%23%20_El%20Lapa%20Apaleao%27_%20.mp3");
+        audioR.currentTime = 9;
+        audioR.play().catch(e => console.log("Audio bloqueado por el navegador"));
 
-      const elegido = parseInt(document.getElementById('numero').value);
-      const ganador = Math.random() < 0.3 ? elegido : elegirOtro(elegido);
-      chosenIndex = numbers.indexOf(ganador);
+        const elegido = parseInt(document.getElementById('numero-ruleta').value);
+        // 30% de probabilidad de que gane lo elegido
+        const ganador = Math.random() < 0.3 ? elegido : numsR[Math.floor(Math.random() * numsR.length)];
+        const winnerIdx = numsR.indexOf(ganador);
 
-      const vueltas = 5;
-      const sliceAngle = 2 * Math.PI / numbers.length;
-      endAngle = vueltas * 2 * Math.PI; // Solo marcamos las vueltas del disco
-      startAngle = 0; 
-      startTime = null;
+        let startTime = null;
+        const duration = 5000; 
 
-      requestAnimationFrame(animate);
+        function animateR(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const elapsed = timestamp - startTime;
+            const t = elapsed / duration;
+
+            if (t < 1) {
+                const easeOut = 1 - Math.pow(1 - t, 3);
+                // El disco gira
+                const currentDiscAngle = easeOut * (Math.PI * 10);
+                // La bola gira en sentido contrario y frena en el sitio
+                ballRotationR = (t * -40) + (winnerIdx * (2 * Math.PI / numsR.length));
+                
+                drawRouletteR(currentDiscAngle);
+                requestAnimationFrame(animateR);
+            } else {
+                isSpinningR = false;
+                if(audioR) audioR.pause();
+                
+                const msj = (ganador === elegido) ? "¡POSTRE PAGADO! Gema me hacías te observa." : "Has fallado, apaleado. Dame una calada.";
+                document.getElementById('resultado-ruleta').textContent = `Número: ${ganador} - ${msj}`;
+            }
+        }
+        requestAnimationFrame(animateR);
     }
 
-    function animate(timestamp) {
-      if (!startTime) startTime = timestamp;
-      const elapsed = timestamp - startTime;
-      const t = elapsed / duration;
-
-      if (t < 1) {
-        const easeOut = 1 - Math.pow(1 - t, 3);
-        const currentAngle = startAngle + (endAngle - startAngle) * easeOut;
-        
-        // La bola gira más rápido al principio y frena
-        ballRotation = (t * -40) + (chosenIndex * (2 * Math.PI / numbers.length));
-        
-        drawRoulette(currentAngle);
-        requestAnimationFrame(animate);
-      } else {
-        // Posición final exacta
-        const sliceAngle = 2 * Math.PI / numbers.length;
-        const finalDiscAngle = endAngle;
-        ballRotation = finalDiscAngle + (chosenIndex * sliceAngle) + sliceAngle / 2;
-        
-        drawRoulette(finalDiscAngle);
-        spinning = false;
-        mostrarResultado();
-      }
-    }
-
-    function elegirOtro(exclude) {
-      return numbers.filter(n => n !== exclude)[Math.floor(Math.random() * (numbers.length - 1))];
-    }
-
-    function mostrarResultado() {
-      if (audioRuleta) {
-        audioRuleta.pause();
-        audioRuleta.currentTime = 0;
-      }
-      const elegido = parseInt(document.getElementById('numero').value);
-      const ganador = numbers[chosenIndex];
-      let mensaje = "";
-
-      if (elegido === ganador) {
-        mensaje = "¡Enhorabuena, acertaste! No hay Calada pal Lapa";
-      } else if (colors[elegido] === colors[ganador]) {
-        mensaje = "¡ROJOS NO! Una calada pal Lapa";
-      } else {
-        mensaje = "Has fallado, no hay postre APALEADO";
-      }
-
-      document.getElementById('resultado').textContent = "Número ganador: " + ganador + " - " + mensaje;
-    }
-
-    // Dibujar ruleta inicial
-    drawRoulette(0);
+    // Dibujado inicial
+    drawRouletteR(0);
 </script>
 </body>
 
